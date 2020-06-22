@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { logOut } from '../../firebase/firebaseAuth';
 
-const Navigation = (props) => {
+const Navigation = ({ currentUser }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const handleHamburgerClick = () => {
     setIsNavOpen(!isNavOpen);
   };
+
   return (
     <nav className="bg-gray-800">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="relative flex items-center justify-between h-16">
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        <div className="flex items-center justify-between h-16">
+          <div className="inset-y-0 left-0 flex items-center sm:hidden">
             {/* <!-- Mobile menu button--> */}
             <button
               onClick={handleHamburgerClick}
@@ -54,7 +56,7 @@ const Navigation = (props) => {
               <h1 className="text-gray-100 text-center text-xl">
                 {' '}
                 <span
-                  className="fab fa-react fa-lg"
+                  className="fas fa-link fa-lg"
                   style={{ color: '#61DBFB' }}
                 />{' '}
                 Link repository
@@ -68,12 +70,14 @@ const Navigation = (props) => {
                 >
                   Home
                 </Link>
-                <Link
-                  to="/app"
-                  className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-                >
-                  App
-                </Link>
+                {currentUser && (
+                  <Link
+                    to="/app"
+                    className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+                  >
+                    App
+                  </Link>
+                )}
                 <Link
                   to="/about"
                   className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
@@ -83,10 +87,29 @@ const Navigation = (props) => {
               </div>
             </div>
           </div>
+          <div>
+            {currentUser && (
+              <button
+                className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+                onClick={logOut}
+              >
+                Log out
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className={isNavOpen ? '' : 'hidden sm:hidden'}>
+      <div
+        style={{
+          position: 'absolute',
+          width: '100%',
+          left: 0,
+          top: 64,
+          zIndex: 1,
+        }}
+        className={isNavOpen ? 'bg-gray-800' : 'hidden sm:hidden'}
+      >
         <div className="px-2 pt-2 pb-3">
           <Link
             to="/"
