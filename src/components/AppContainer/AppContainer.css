@@ -1,0 +1,22 @@
+.custom-select__input {
+  color: transparent;
+  text-shadow: 0 0 0 #333;
+}
+.custom-select__input:focus {
+  outline: none;
+}
+
+.custom-select__option {
+  background-color: white;
+  padding: 5px 0 5px 10px;
+  cursor: pointer;
+}
+
+.custom-select__option:hover {
+  background-color: #eee;
+}
+
+.custom-select__option--input {
+  padding: 5px;
+  cursor: pointer;
+}
