@@ -33,7 +33,7 @@ function App() {
             path="/"
             exact
             component={() => (
-              <div style={{ marginTop: '15%' }}>
+              <div style={{ marginTop: '13%' }}>
                 <AuthForm currentUser={currentUser} />
               </div>
             )}

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CustomSelect from '../CustomSelect/CustomSelect';
+import { addLink } from '../../firebase/firebaseCRUD';
 
 const LinkForm = ({ currentUser }) => {
   const [isNewLink, setIsNewLink] = useState(true);
 
   const [link, setLink] = useState({ value: '', error: null });
-  const [group, setGroup] = useState({ value: '', error: null });
+  const [group, setGroup] = useState({ value: 'test1', error: null });
   const [status, setStatus] = useState({ value: '', error: null });
   const [title, setTitle] = useState({
     value: '',
@@ -26,17 +27,28 @@ const LinkForm = ({ currentUser }) => {
     }
 
     if (isNewLink) {
-      promise = 1; //create();
-    } else {
-      promise = 2; //update();
+      promise = addLink(
+        {
+          url: link.value,
+          group: group.value,
+          status: status.value,
+          title: title.value,
+          description: description.value,
+        },
+        currentUser
+      ); //create();
     }
+    // else {
+    //   promise = 2; //update();
+    // }
 
-    // promise.catch((err) => {
-    //   if (err.code === 'auth/wrong-password') {
-    //     setPassword({ ...password, error: err.message });
-    //   }
-    //   console.error(err);
-    // });
+    promise
+      .then((d) => {
+        console.log('SUCCESS');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const validateForm = () => {
@@ -46,7 +58,7 @@ const LinkForm = ({ currentUser }) => {
     }
     const isGroupValid = group.value && group.value.trim() !== '';
     if (!isGroupValid) {
-      setGroup({ ...group, error: 'Group is invalid!' });
+      setGroup({ ...group, error: 'Please select group!' });
     }
     const isStatusValid = status.value && status.value.trim() !== '';
     if (!isStatusValid) {
@@ -54,14 +66,14 @@ const LinkForm = ({ currentUser }) => {
     }
     const isTitleValid = title.value && title.value.trim() !== '';
     if (!isTitleValid) {
-      setTitle({ ...title, error: 'Please enter valid title!' });
+      setTitle({ ...title, error: 'Please enter proper title!' });
     }
     const isDescriptionValid =
       description.value && description.value.trim() !== '';
     if (!isDescriptionValid) {
       setDescription({
         ...description,
-        error: 'Please enter valid description!',
+        error: 'Please enter proper description!',
       });
     }
     return (
@@ -71,6 +83,28 @@ const LinkForm = ({ currentUser }) => {
       isTitleValid &&
       isDescriptionValid
     );
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    switch (e.target.name) {
+      case 'link':
+        setLink({ error: null, value });
+        break;
+      case 'group':
+        setGroup({ error: null, value });
+        break;
+      case 'status':
+        setStatus({ error: null, value });
+        break;
+      case 'title':
+        setTitle({ error: null, value });
+        break;
+      case 'description':
+        setDescription({ error: null, value });
+        break;
+      default:
+    }
   };
 
   const validateURL = (url) => {
@@ -97,6 +131,7 @@ const LinkForm = ({ currentUser }) => {
           Link
         </label>
         <input
+          onChange={handleChange}
           className={`${
             link.error && 'border-red-500'
           } shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
@@ -110,7 +145,11 @@ const LinkForm = ({ currentUser }) => {
         )}
       </div>
       <div>
-        <CustomSelect />
+        <CustomSelect
+          changeHandler={handleChange}
+          value={group.value}
+          error={group.error}
+        />
       </div>
       <div className="mb-6">
         <label
@@ -121,6 +160,7 @@ const LinkForm = ({ currentUser }) => {
         </label>
 
         <select
+          onChange={handleChange}
           name="status"
           id="status"
           className={` ${
@@ -145,13 +185,19 @@ const LinkForm = ({ currentUser }) => {
           Title
         </label>
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          onChange={handleChange}
+          className={`${
+            title.error && 'border-red-500'
+          } shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           id="title"
           name="title"
           maxLength="15"
           type="text"
           placeholder="Title"
         />
+        {title.error && (
+          <p className="text-red-500 text-xs italic">{title.error}</p>
+        )}
         <label
           className="block text-gray-700 text-sm font-bold mb-2 mt-5"
           htmlFor="description"
@@ -160,12 +206,18 @@ const LinkForm = ({ currentUser }) => {
         </label>
 
         <textarea
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          onChange={handleChange}
+          className={`${
+            description.error && 'border-red-500'
+          } shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           id="description"
           name="description"
           type="text"
           placeholder="Description"
         ></textarea>
+        {description.error && (
+          <p className="text-red-500 text-xs italic">{description.error}</p>
+        )}
       </div>
       <div className="flex items-center justify-end">
         <button

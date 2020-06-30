@@ -63,7 +63,6 @@ const AuthForm = ({ currentUser }) => {
         error: 'Repeated password is not the same!',
       });
     }
-    debugger;
     return (
       isEmailValid &&
       ((isPasswordStrong && arePasswordsMatch) || !isRegisterForm)

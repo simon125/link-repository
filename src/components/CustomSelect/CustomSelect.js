@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const CustomSelect = (props) => {
+const CustomSelect = ({ value, error, changeHandler }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -16,16 +16,20 @@ const CustomSelect = (props) => {
       </div>
       <div style={{ position: 'relative' }}>
         <input
-          value=""
+          value={value}
+          onChange={changeHandler}
           onFocus={() => setIsOpen(true)}
           onBlur={() => setIsOpen(false)}
-          className="custom-select__input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className={`${
+            error && 'border-red-500'
+          } custom-select__input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           id="group"
           type="text"
           placeholder="Select Group"
           autoComplete="off"
           style={{ cursor: 'pointer' }}
         />
+        {error && <p className="text-red-500 text-xs italic">{error}</p>}
         <span
           style={{
             zIndex: 1,
@@ -54,7 +58,9 @@ const CustomSelect = (props) => {
             }}
           >
             <li
-              onClick={() => console.log(123)}
+              name="test1"
+              value="test1"
+              onClick={changeHandler}
               className="custom-select__option flex justify-between"
             >
               test1
