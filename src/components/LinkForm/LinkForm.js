@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import { addLink } from '../../firebase/firebaseCRUD';
+import { showToast } from '../../utils';
+
+const DUMMYDATA = [
+  { id: 'dsad', value: 'group 1' },
+  { id: '1231qwd23', value: 'group 2' },
+  { id: '123agg123', value: 'group 3' },
+];
 
 const LinkForm = ({ currentUser }) => {
   const [isNewLink, setIsNewLink] = useState(true);
 
   const [link, setLink] = useState({ value: '', error: null });
-  const [group, setGroup] = useState({ value: 'test1', error: null });
+  const [group, setGroup] = useState({ value: '', error: null });
   const [status, setStatus] = useState({ value: '', error: null });
   const [title, setTitle] = useState({
     value: '',
@@ -44,10 +51,19 @@ const LinkForm = ({ currentUser }) => {
 
     promise
       .then((d) => {
-        console.log('SUCCESS');
+        showToast('You successfully added new link', 'success');
       })
       .catch((err) => {
+        showToast('Something went wrong! Please contact with admin.', 'error');
         console.error(err);
+      })
+      .finally(() => {
+        const reset = { value: '', error: null };
+        setLink(reset);
+        setGroup(reset);
+        setStatus(reset);
+        setTitle(reset);
+        setDescription(reset);
       });
   };
 
@@ -131,6 +147,7 @@ const LinkForm = ({ currentUser }) => {
           Link
         </label>
         <input
+          value={link.value}
           onChange={handleChange}
           className={`${
             link.error && 'border-red-500'
@@ -145,8 +162,26 @@ const LinkForm = ({ currentUser }) => {
         )}
       </div>
       <div>
+        {/* value,
+  error,
+  options,
+  handlers: { changeHandler, removeGroup, addGroup, updateGroup }, */}
         <CustomSelect
-          changeHandler={handleChange}
+          handlers={{
+            handleChange: (e) => {
+              setGroup({ error: null, value: e.target.dataset.value });
+            },
+            removeGroup: () => {
+              console.log(123);
+            },
+            addGroup: () => {
+              console.log(123);
+            },
+            updateGroup: () => {
+              console.log(123);
+            },
+          }}
+          options={DUMMYDATA}
           value={group.value}
           error={group.error}
         />
@@ -160,6 +195,7 @@ const LinkForm = ({ currentUser }) => {
         </label>
 
         <select
+          value={status.value}
           onChange={handleChange}
           name="status"
           id="status"
@@ -185,6 +221,7 @@ const LinkForm = ({ currentUser }) => {
           Title
         </label>
         <input
+          value={title.value}
           onChange={handleChange}
           className={`${
             title.error && 'border-red-500'
@@ -206,6 +243,7 @@ const LinkForm = ({ currentUser }) => {
         </label>
 
         <textarea
+          value={description.value}
           onChange={handleChange}
           className={`${
             description.error && 'border-red-500'

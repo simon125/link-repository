@@ -9,5 +9,13 @@ export const addLink = (link, user) => {
     status,
     title,
     description,
+    iframeFriendly: true,
+  });
+};
+
+export const addGroup = (group, user) => {
+  return db.collection('groups').add({
+    userUid: user.uid,
+    group,
   });
 };
