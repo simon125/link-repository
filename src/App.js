@@ -10,6 +10,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { app } from './firebase/firebaseInit';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -45,6 +48,17 @@ function App() {
           <Route path="/about" component={About} />
         </Switch>
       </Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }
