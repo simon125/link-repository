@@ -43,6 +43,7 @@ const CustomSelectOption = ({
               type="button"
               onClick={(e) => {
                 removeGroup(option.id);
+                e.stopPropagation();
               }}
               className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
             >
@@ -84,28 +85,6 @@ const CustomSelectOption = ({
           </button>
         </li>
       )}
-      {/* <li className="custom-select__option flex justify-between">
-                  test2
-                  <div>
-                    <button className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded">
-                      <span className="fas fa-pen" />{' '}
-                    </button>
-                    <button className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded">
-                      <span className="fas fa-trash-alt " />{' '}
-                    </button>
-                  </div>
-                </li>
-                <li className="custom-select__option flex justify-between">
-                  test3
-                  <div>
-                    <button className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded">
-                      <span className="fas fa-pen" />{' '}
-                    </button>
-                    <button className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded">
-                      <span className="fas fa-trash-alt " />{' '}
-                    </button>
-                  </div>
-                </li> */}
     </>
   );
 };

@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { app } from './firebase/firebaseInit';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
             path="/"
             exact
             component={() => (
-              <div style={{ marginTop: '13%' }}>
+              <div style={{ marginTop: '5%' }}>
                 <AuthForm currentUser={currentUser} />
               </div>
             )}

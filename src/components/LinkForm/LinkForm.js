@@ -1,27 +1,37 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CustomSelect from '../CustomSelect/CustomSelect';
-import { addLink } from '../../firebase/firebaseCRUD';
+import {
+  addLink,
+  addGroup,
+  removeGroup,
+  updateGroup,
+} from '../../firebase/firebaseCRUD';
 import { showToast } from '../../utils';
 
-const DUMMYDATA = [
-  { id: 'dsad', value: 'group 1' },
-  { id: '1231qwd23', value: 'group 2' },
-  { id: '123agg123', value: 'group 3' },
-];
-
-const LinkForm = ({ currentUser }) => {
+const LinkForm = ({
+  currentUser,
+  availableGroups,
+  linkToEdit,
+  setLinkToEdit,
+}) => {
   const [isNewLink, setIsNewLink] = useState(true);
 
   const [link, setLink] = useState({ value: '', error: null });
-  const [group, setGroup] = useState({ value: '', error: null });
-  const [status, setStatus] = useState({ value: '', error: null });
+  const [group, setGroup] = useState({
+    value: linkToEdit?.group || '',
+    error: null,
+  });
+  const [status, setStatus] = useState({
+    value: linkToEdit?.status || '',
+    error: null,
+  });
   const [title, setTitle] = useState({
-    value: '',
+    value: linkToEdit?.title || '',
     error: null,
   });
   const [description, setDescription] = useState({
-    value: '',
+    value: linkToEdit?.description || '',
     error: null,
   });
 
@@ -58,13 +68,17 @@ const LinkForm = ({ currentUser }) => {
         console.error(err);
       })
       .finally(() => {
-        const reset = { value: '', error: null };
-        setLink(reset);
-        setGroup(reset);
-        setStatus(reset);
-        setTitle(reset);
-        setDescription(reset);
+        resetForm();
       });
+  };
+
+  const resetForm = () => {
+    const reset = { value: '', error: null };
+    setLink(reset);
+    setGroup(reset);
+    setStatus(reset);
+    setTitle(reset);
+    setDescription(reset);
   };
 
   const validateForm = () => {
@@ -131,7 +145,9 @@ const LinkForm = ({ currentUser }) => {
     return regexp.test(url);
   };
 
-  const handleCancelClick = (e) => {};
+  const handleCancelClick = (e) => {
+    resetForm();
+  };
 
   return (
     <form
@@ -164,24 +180,21 @@ const LinkForm = ({ currentUser }) => {
       <div>
         {/* value,
   error,
-  options,
+  options,addGroup
+deleteGroup
   handlers: { changeHandler, removeGroup, addGroup, updateGroup }, */}
         <CustomSelect
           handlers={{
             handleChange: (e) => {
               setGroup({ error: null, value: e.target.dataset.value });
             },
-            removeGroup: () => {
-              console.log(123);
-            },
-            addGroup: () => {
-              console.log(123);
-            },
-            updateGroup: () => {
-              console.log(123);
+            removeGroup,
+            addGroup: (group) => addGroup(group, currentUser),
+            updateGroup: (id, optionName) => {
+              updateGroup(id, optionName);
             },
           }}
-          options={DUMMYDATA}
+          options={availableGroups}
           value={group.value}
           error={group.error}
         />

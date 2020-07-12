@@ -2,24 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CustomSelectOption from './CustomSelectOption';
 
-/**
- * Hook that alerts clicks outside of the passed ref
- */
 const useOutsideAlerter = (ref, callback) => {
   useEffect(() => {
-    /**
-     * Alert if clicked on outside of element
-     */
-    function handleClickOutside(event) {
+    const handleClickOutside = (event) => {
       if (ref.current && !ref.current.contains(event.target)) {
         callback();
       }
-    }
-
-    // Bind the event listener
+    };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [callback, ref]);
@@ -43,6 +34,12 @@ const CustomSelect = ({
     setIsOpen,
     setIsEditModeOnGlobal,
   };
+
+  const handleAddGroupClick = () => {
+    addGroup(newOption);
+    setNewOption('');
+  };
+
   return (
     <div ref={wrapperRef}>
       <div className="flex">
@@ -91,8 +88,11 @@ const CustomSelect = ({
             style={{
               width: '100%',
               border: '1px solid #999',
+              borderBottom: 'none',
               borderRadius: 3,
               backgroundColor: 'white',
+              maxHeight: 150,
+              overflowY: 'auto',
             }}
           >
             {options.map((option) => (
@@ -103,27 +103,34 @@ const CustomSelect = ({
                 handlers={optionHandlers}
               />
             ))}
-
-            <li className="custom-select__option--input flex">
-              <input
-                value={newOption}
-                onChange={(e) => setNewOption(e.target.value)}
-                style={{ width: '60%' }}
-                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="link"
-                type="text"
-                placeholder="New group"
-              />
-              <button
-                onClick={() => addGroup(newOption)}
-                style={{ width: '40%' }}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Add Group
-              </button>
-            </li>
           </ul>
+          <div
+            style={{
+              border: '1px solid #999',
+              borderRadius: 3,
+              backgroundColor: 'white',
+              borderTop: 'none',
+            }}
+            className="custom-select__option--input flex"
+          >
+            <input
+              value={newOption}
+              onChange={(e) => setNewOption(e.target.value)}
+              style={{ width: '60%' }}
+              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="link"
+              type="text"
+              placeholder="New group"
+            />
+            <button
+              onClick={handleAddGroupClick}
+              style={{ width: '40%' }}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
+              type="button"
+            >
+              Add Group
+            </button>
+          </div>
         </div>
       </div>
     </div>
