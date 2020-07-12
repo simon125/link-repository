@@ -58,10 +58,7 @@ const DetailModal = (props) => {
               </span>
             </div>
             <iframe
-              onLoad={(e) => {
-                // debugger;
-                // if not marked hide and don't display in the future
-              }}
+              onLoad={(e) => {}}
               title="https://dev.to/rishabk7/my-blog-5386"
               src="https://dev.to/rishabk7/my-blog-5386"
               width={window.innerWidth * 0.8 + 'px'}

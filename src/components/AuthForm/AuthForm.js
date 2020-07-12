@@ -24,7 +24,6 @@ const AuthForm = ({ currentUser }) => {
     e.preventDefault();
     let promise;
     const isFormValid = validateForm();
-    debugger;
     if (!isFormValid) {
       return;
     }

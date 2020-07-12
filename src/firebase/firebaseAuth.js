@@ -4,16 +4,6 @@ export const getCurrentUser = () => {
   return auth.currentUser;
 };
 
-// auth.onAuthStateChanged(function (user) {
-//   if (user) {
-//     // User is signed in.
-//     console.log('user: ', user);
-//   } else {
-//     console.log('user: ', user);
-//     // No user is signed in.
-//   }
-// });
-
 /**
  * @param {string} email
  * @param {string} password
@@ -21,11 +11,9 @@ export const getCurrentUser = () => {
 export const registerUser = async (email, password) => {
   try {
     const user = await auth.createUserWithEmailAndPassword(email, password);
-    debugger;
   } catch (error) {
     var errorCode = error.code;
     var errorMessage = error.message;
-    debugger;
   }
 };
 

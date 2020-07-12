@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LinkTableFilter from './LinkTableFilter';
 import LinkTableRow from './LinkTableRow';
-import LinkTableFooter from './LinkTableFooter';
 import PropTypes from 'prop-types';
 import { removeLink, updateLink } from '../../firebase/firebaseCRUD';
 
@@ -10,6 +9,12 @@ const LinkTable = (props) => {
   const [linksToDisplayWithCheckbox, setLinksToDisplayWithCheckbox] = useState(
     []
   );
+  const [filters, setFilters] = useState({
+    group: 'All',
+    status: 'All',
+    title: '',
+  });
+
   useEffect(() => {
     setLinksToDisplayWithCheckbox(
       linksToDisplay.map((link) => ({ ...link, checkbox: false }))
@@ -34,7 +39,11 @@ const LinkTable = (props) => {
 
   return (
     <div className="rounded overflow-hidden shadow-lg p-5">
-      <LinkTableFilter availableGroups={availableGroups} />
+      <LinkTableFilter
+        filters={filters}
+        setFilters={setFilters}
+        availableGroups={availableGroups}
+      />
 
       <table className="table-auto w-full mb-2">
         <thead>
@@ -62,18 +71,34 @@ const LinkTable = (props) => {
           </tr>
         </thead>
         <tbody>
-          {linksToDisplayWithCheckbox.map((link) => (
-            <LinkTableRow
-              setLink={setLink}
-              handleCheckRow={handleCheckRow}
-              availableGroups={availableGroups}
-              rowHandlers={rowHandlers}
-              {...link}
-            />
-          ))}
+          {linksToDisplayWithCheckbox
+            .filter((link) => {
+              let groupMatch = false,
+                titleMatch = false,
+                statusMatch = false;
+              if (filters.group === 'All' || filters.group === link.group) {
+                groupMatch = true;
+              }
+              if (filters.title === '' || link.title.includes(filters.title)) {
+                titleMatch = true;
+              }
+              if (filters.status === 'All' || filters.status === link.status) {
+                statusMatch = true;
+              }
+              return groupMatch && titleMatch && statusMatch;
+            })
+            .map((link) => (
+              <LinkTableRow
+                key={link.id}
+                setLink={setLink}
+                handleCheckRow={handleCheckRow}
+                availableGroups={availableGroups}
+                rowHandlers={rowHandlers}
+                {...link}
+              />
+            ))}
         </tbody>
       </table>
-      <LinkTableFooter />
     </div>
   );
 };
