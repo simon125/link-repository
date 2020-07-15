@@ -49,21 +49,6 @@ const LinkTable = (props) => {
         <thead>
           <tr>
             <th className="border px-4 py-2"></th>
-            <th className="border px-4 py-2">
-              {' '}
-              <input
-                id="link"
-                type="checkbox"
-                onChange={(e) => {
-                  setLinksToDisplayWithCheckbox(
-                    linksToDisplayWithCheckbox.map((link) => {
-                      link.checkbox = e.target.checked;
-                      return link;
-                    })
-                  );
-                }}
-              />
-            </th>
             <th className="border px-4 py-2">Title</th>
             <th className="border px-4 py-2">Group</th>
             <th className="border px-4 py-2">Status</th>

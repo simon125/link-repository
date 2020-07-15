@@ -9,7 +9,7 @@ import { db } from '../../firebase/firebaseInit';
 const AppContainer = ({ currentUser }) => {
   const [groups, setGroups] = useState([]);
   const [linksToDisplay, setLinksToDisplay] = useState([]);
-  const [link, setLink] = useState(null);
+  const [link, setLink] = useState({});
 
   useEffect(() => {
     if (currentUser) {
@@ -32,20 +32,15 @@ const AppContainer = ({ currentUser }) => {
           setLinksToDisplay(links);
         });
     }
-  }, [currentUser]);
-  //  !!currentUser ?
-  console.log(linksToDisplay);
+  }, [currentUser, link]);
 
-  return (
+  return !!currentUser ? (
     <div className="flex justify-around pt-5 relative">
-      {/* <div> */}
       <LinkForm
         linkToEdit={link}
-        setLinkToEdit={setLink}
         availableGroups={groups}
         currentUser={currentUser}
       />
-      {/* </div> */}
       <div style={{ width: '60vw' }}>
         <LinkTable
           setLink={setLink}
@@ -54,10 +49,9 @@ const AppContainer = ({ currentUser }) => {
         />
       </div>
     </div>
+  ) : (
+    <Redirect to="/" />
   );
-  //  : (
-  //   <Redirect to="/" />
-  // );
 };
 
 AppContainer.propTypes = {};

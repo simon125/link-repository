@@ -55,6 +55,7 @@ const CustomSelect = ({
         <input
           value={value}
           onFocus={() => setIsOpen(true)}
+          readOnly={true}
           className={`${
             error && 'border-red-500'
           } custom-select__input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}

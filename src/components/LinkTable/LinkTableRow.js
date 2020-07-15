@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const AVAILABLE_STATUSES = ['Already read', 'In progress', 'Not touched'];
@@ -21,6 +21,11 @@ const LinkTableRow = ({
   const [showDescription, setShowDescription] = useState(false);
   const [groupToDisplay, setGroupToDisplay] = useState(group);
   const [statusToDisplay, setStatusToDisplay] = useState(status);
+
+  useEffect(() => {
+    setGroupToDisplay(group);
+    setStatusToDisplay(status);
+  }, [group, status]);
 
   const handleChange = (e) => {
     switch (e.target.name) {
@@ -54,16 +59,6 @@ const LinkTableRow = ({
               <span className="fa fa-plus fa-sm" />
             )}
           </button>
-        </td>
-        <td className="border text-center py-2">
-          <input
-            id="link"
-            type="checkbox"
-            checked={checkbox}
-            onChange={() => {
-              handleCheckRow(id);
-            }}
-          />
         </td>
         <td className="border py-2 px-3">{title}</td>
         <td className="border">
@@ -104,23 +99,20 @@ const LinkTableRow = ({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              setLink({ description, group, status, title, url, id });
+              setLink({
+                description,
+                group,
+                status,
+                title,
+                url,
+                id,
+              });
             }}
             className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
           >
             <span className="fas fa-pen" />{' '}
           </button>
-          <button
-            style={{ height: 30, width: 30 }}
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('SHOW MODAL');
-            }}
-            className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
-          >
-            <span className="fas fa-eye" />{' '}
-          </button>
+
           <a
             style={{ height: 30, width: 30, position: 'relative' }}
             href={url}

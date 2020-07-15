@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import {
@@ -6,62 +6,70 @@ import {
   addGroup,
   removeGroup,
   updateGroup,
+  updateLink,
 } from '../../firebase/firebaseCRUD';
 import { showToast } from '../../utils';
 
-const LinkForm = ({
-  currentUser,
-  availableGroups,
-  linkToEdit,
-  setLinkToEdit,
-}) => {
-  const [isNewLink, setIsNewLink] = useState(true);
+const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
+  const [id, setId] = useState(null);
 
-  const [link, setLink] = useState({ value: '', error: null });
+  const [link, setLink] = useState({
+    value: '',
+    error: null,
+  });
   const [group, setGroup] = useState({
-    value: linkToEdit?.group || '',
+    value: '',
     error: null,
   });
   const [status, setStatus] = useState({
-    value: linkToEdit?.status || '',
+    value: '',
     error: null,
   });
   const [title, setTitle] = useState({
-    value: linkToEdit?.title || '',
+    value: '',
     error: null,
   });
   const [description, setDescription] = useState({
-    value: linkToEdit?.description || '',
+    value: '',
     error: null,
   });
 
+  useEffect(() => {
+    const { description, group, id, status, title, url } = linkToEdit;
+    const error = null;
+    setId(id);
+    setLink({ error, value: url || '' });
+    setGroup({ error, value: group || '' });
+    setStatus({ error, value: status || '' });
+    setTitle({ error, value: title || '' });
+    setDescription({ error, value: description || '' });
+  }, [linkToEdit]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    let promise;
     const isFormValid = validateForm();
     if (!isFormValid) {
       return;
     }
 
-    if (isNewLink) {
-      promise = addLink(
-        {
-          url: link.value,
-          group: group.value,
-          status: status.value,
-          title: title.value,
-          description: description.value,
-        },
-        currentUser
-      ); //create();
-    }
-    // else {
-    //   promise = 2; //update();
-    // }
+    const linkToProcess = {
+      url: link.value,
+      group: group.value,
+      status: status.value,
+      title: title.value,
+      description: description.value,
+    };
+    debugger;
+    const promise = id
+      ? updateLink(id, linkToProcess)
+      : addLink(linkToProcess, currentUser);
 
     promise
       .then((d) => {
-        showToast('You successfully added new link', 'success');
+        const msg = id
+          ? 'You successfully updated link'
+          : 'You successfully added new link';
+        showToast(msg, 'success');
       })
       .catch((err) => {
         showToast('Something went wrong! Please contact with admin.', 'error');
@@ -74,6 +82,7 @@ const LinkForm = ({
 
   const resetForm = () => {
     const reset = { value: '', error: null };
+    setId(null);
     setLink(reset);
     setGroup(reset);
     setStatus(reset);
@@ -117,21 +126,22 @@ const LinkForm = ({
 
   const handleChange = (e) => {
     const value = e.target.value;
+    const error = null;
     switch (e.target.name) {
       case 'link':
-        setLink({ error: null, value });
+        setLink({ error, value });
         break;
       case 'group':
-        setGroup({ error: null, value });
+        setGroup({ error, value });
         break;
       case 'status':
-        setStatus({ error: null, value });
+        setStatus({ error, value });
         break;
       case 'title':
-        setTitle({ error: null, value });
+        setTitle({ error, value });
         break;
       case 'description':
-        setDescription({ error: null, value });
+        setDescription({ error, value });
         break;
       default:
     }
@@ -168,7 +178,6 @@ const LinkForm = ({
           className={`${
             link.error && 'border-red-500'
           } shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
-          id="link"
           name="link"
           type="text"
           placeholder="Link"
@@ -178,11 +187,6 @@ const LinkForm = ({
         )}
       </div>
       <div>
-        {/* value,
-  error,
-  options,addGroup
-deleteGroup
-  handlers: { changeHandler, removeGroup, addGroup, updateGroup }, */}
         <CustomSelect
           handlers={{
             handleChange: (e) => {
@@ -275,7 +279,7 @@ deleteGroup
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="submit"
         >
-          Add Link
+          {id ? 'Update link' : 'Add link'}{' '}
         </button>
         <button
           type="reset"
