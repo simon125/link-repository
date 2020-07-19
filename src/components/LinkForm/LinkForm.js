@@ -59,7 +59,6 @@ const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
       title: title.value,
       description: description.value,
     };
-    debugger;
     const promise = id
       ? updateLink(id, linkToProcess)
       : addLink(linkToProcess, currentUser);
@@ -163,11 +162,11 @@ const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
     <form
       onSubmit={handleSubmit}
       autoComplete="off"
-      className="bg-white shadow-md rounded px-8 pb-8 sm:w-full md:w-1/2 lg:w-1/2 xl:w-1/3"
+      className="bg-white shadow-md rounded px-3 pb-8"
     >
       <div className="mb-4">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mt-4"
           htmlFor="link"
         >
           Link
@@ -203,9 +202,9 @@ const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
           error={group.error}
         />
       </div>
-      <div className="mb-6">
+      <div className="mb-3">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2 mt-5"
+          className="block text-gray-700 text-sm font-bold mb-1 mt-2"
           htmlFor="status"
         >
           Status
@@ -232,7 +231,7 @@ const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
         )}
 
         <label
-          className="block text-gray-700 text-sm font-bold mb-2 mt-5"
+          className="block text-gray-700 text-sm font-bold mb-1 mt-2"
           htmlFor="title"
         >
           Title
@@ -253,7 +252,7 @@ const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
           <p className="text-red-500 text-xs italic">{title.error}</p>
         )}
         <label
-          className="block text-gray-700 text-sm font-bold mb-2 mt-5"
+          className="block text-gray-700 text-sm font-bold mb-1 mt-2"
           htmlFor="description"
         >
           Description

@@ -35,6 +35,7 @@ const About = (props) => {
         <li>[ ] forgot password link</li>
         <li>[ ] login by fb/google/gh who knows :D </li>
         <li>[ ] fix eslint issues </li>
+        <li>[ ] !! R W D !! </li>
       </ul>
     </div>
   );

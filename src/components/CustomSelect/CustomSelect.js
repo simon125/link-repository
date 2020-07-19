@@ -45,7 +45,7 @@ const CustomSelect = ({
       <div className="flex">
         {' '}
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mb-1"
           htmlFor="password"
         >
           Group
