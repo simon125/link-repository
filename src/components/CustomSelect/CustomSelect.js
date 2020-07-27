@@ -129,7 +129,7 @@ const CustomSelect = ({
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
               type="button"
             >
-              Add Group
+              {window.innerWidth < 500 ? '+' : 'Add Group'}
             </button>
           </div>
         </div>

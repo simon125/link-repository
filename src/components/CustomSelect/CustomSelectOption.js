@@ -70,7 +70,11 @@ const CustomSelectOption = ({
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
-            Save
+            {window.innerWidth < 600 ? (
+              <span className="fa fa-check" />
+            ) : (
+              'Save'
+            )}
           </button>
           <button
             onClick={() => {
@@ -81,7 +85,11 @@ const CustomSelectOption = ({
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
-            Cancel
+            {window.innerWidth < 600 ? (
+              <span className="fa fa-times" />
+            ) : (
+              'Save'
+            )}
           </button>
         </li>
       )}

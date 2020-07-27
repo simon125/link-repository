@@ -3,10 +3,19 @@ import PropTypes from 'prop-types';
 import { removeLink, updateLink } from '../../firebase/firebaseCRUD';
 import LinkCard from './LinkCard';
 
-const LinkCards = ({ linksToDisplay, availableGroups }) => {
+const LinkCards = ({
+  linksToDisplay,
+  availableGroups,
+  setLink,
+  handleShowForm,
+  handleHideForm,
+}) => {
   const rowHandlers = {
     removeLink,
     updateLink,
+    setLink,
+    handleShowForm,
+    handleHideForm,
   };
   return (
     <>

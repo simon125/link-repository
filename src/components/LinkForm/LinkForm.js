@@ -10,7 +10,12 @@ import {
 } from '../../firebase/firebaseCRUD';
 import { showToast } from '../../utils';
 
-const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
+const LinkForm = ({
+  currentUser,
+  availableGroups,
+  linkToEdit,
+  handleHideForm,
+}) => {
   const [id, setId] = useState(null);
 
   const [link, setLink] = useState({
@@ -76,6 +81,7 @@ const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
       })
       .finally(() => {
         resetForm();
+        handleHideForm();
       });
   };
 
@@ -164,9 +170,9 @@ const LinkForm = ({ currentUser, availableGroups, linkToEdit }) => {
       autoComplete="off"
       className="bg-white shadow-md rounded px-3 pb-8"
     >
-      <div className="mb-4">
+      <div className="mb-4 pt-1">
         <label
-          className="block text-gray-700 text-sm font-bold mt-4"
+          className="block text-gray-700 text-sm font-bold mt-3"
           htmlFor="link"
         >
           Link

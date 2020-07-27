@@ -13,6 +13,8 @@ const AppContainer = ({ currentUser }) => {
   const [link, setLink] = useState({});
   const [showForm, setShowForm] = useState(false);
 
+  const IS_SMALL_SCREEN = window.innerWidth < 650;
+
   useEffect(() => {
     let unsubscribe = () => {};
     let unsubscribe1 = () => {};
@@ -53,11 +55,11 @@ const AppContainer = ({ currentUser }) => {
   const handleHideForm = () => setShowForm(false);
 
   return !!currentUser ? (
-    // pt-5
     <div className="flex justify-around  relative flex-col lg:flex-row xl:flex-row items-center lg:items-start xl:items-start">
-      <div className="w-full lg:w-2/5 xl:w-2/5 p-3">
-        {showForm && (
+      <div className="w-full lg:w-2/5 xl:w-2/5 lg:p-3 xl:p-3">
+        {((showForm && IS_SMALL_SCREEN) || !IS_SMALL_SCREEN) && (
           <LinkForm
+            handleHideForm={handleHideForm}
             linkToEdit={link}
             availableGroups={groups}
             currentUser={currentUser}
@@ -65,56 +67,83 @@ const AppContainer = ({ currentUser }) => {
         )}
       </div>
       {!showForm && (
-        <div className="w-full lg:w-3/5 xl:w-3/5 p-3">
-          {window.innerWidth > 650 ? (
+        <div className="w-full lg:w-3/5 xl:w-3/5 p-3 pb-5 mb-5">
+          {IS_SMALL_SCREEN ? (
+            <LinkCards
+              handleShowForm={handleShowForm}
+              handleHideForm={handleHideForm}
+              setLink={setLink}
+              availableGroups={groups}
+              linksToDisplay={linksToDisplay}
+            />
+          ) : (
             <LinkTable
               setLink={setLink}
               linksToDisplay={linksToDisplay}
               availableGroups={groups}
             />
-          ) : (
-            <LinkCards
-              availableGroups={groups}
-              linksToDisplay={linksToDisplay}
-            />
           )}
         </div>
       )}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          background: '#2d3748',
-          width: '100%',
-          height: 'fit-content',
-        }}
-        className="flex justify-end p-2"
-      >
-        {!showForm ? (
-          <button
-            onClick={handleShowForm}
-            style={{ width: '40%' }}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-          >
-            Add Link
-          </button>
-        ) : (
-          <button
-            onClick={handleHideForm}
-            style={{ width: '40%' }}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-          >
-            Show Links
-          </button>
-        )}
-      </div>
+      {IS_SMALL_SCREEN && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            background: '#2d3748',
+            width: '100%',
+            height: 'fit-content',
+          }}
+          className="flex justify-end p-2"
+        >
+          {showForm ? (
+            <button
+              onClick={handleHideForm}
+              style={{ width: '40%', fontSize: 13 }}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-1 ml-1 rounded focus:outline-none focus:shadow-outline"
+              type="button"
+            >
+              Links
+            </button>
+          ) : (
+            <>
+              <button
+                style={{ width: '40%' }}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 mx-1 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+              >
+                {'<'}
+              </button>
+              <button
+                style={{ width: '40%' }}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 mx-1 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+              >
+                {'>'}
+              </button>
+              <button
+                style={{ width: '40%' }}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 mx-1 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+              >
+                <span className="fa fa-filter" />
+              </button>
+              <button
+                onClick={handleShowForm}
+                style={{ width: '40%', fontSize: 13 }}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 ml-1 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+              >
+                Add Link
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   ) : (
-    // <Redirect to="/" />
-    <>LOADING</>
+    <Redirect to="/" />
   );
 };
 

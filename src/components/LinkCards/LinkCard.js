@@ -68,12 +68,56 @@ const LinkCard = ({
             </option>
           ))}
         </select>
-        {/* <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-          {status}
-        </span>
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-          {group}
-        </span> */}
+        <div className="pt-3 flex justify-around">
+          <button
+            style={{ height: 30, width: 30 }}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              rowHandlers.setLink({
+                description,
+                group,
+                status,
+                title,
+                url,
+                id,
+              });
+              rowHandlers.handleShowForm();
+            }}
+            className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
+          >
+            <span className="fas fa-pen" />{' '}
+          </button>
+
+          <a
+            style={{ height: 30, width: 30, position: 'relative' }}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
+          >
+            <span
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+              className="fas fa-link"
+            />{' '}
+          </a>
+          <button
+            style={{ height: 30, width: 30 }}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              rowHandlers.removeLink(id);
+            }}
+            className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
+          >
+            <span className="fas fa-trash-alt " />{' '}
+          </button>
+        </div>
       </div>
     </div>
   );
