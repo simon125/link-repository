@@ -36,7 +36,16 @@ const LinkCard = ({
       className=" rounded overflow-hidden shadow-lg"
     >
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{title}</div>
+        <div className="font-bold text-xl mb-2 flex">
+          {' '}
+          <img
+            style={{ width: 20, height: 20 }}
+            className="mr-2"
+            src={`http://www.google.com/s2/favicons?domain=${url}`}
+            alt=""
+          />
+          {title}
+        </div>
         <p className="text-gray-700 text-base">{description}</p>
       </div>
       <div className="px-6 py-4">

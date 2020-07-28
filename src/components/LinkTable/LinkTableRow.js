@@ -60,7 +60,15 @@ const LinkTableRow = ({
             )}
           </button>
         </td>
-        <td className="border py-2 px-3">{title}</td>
+        <td className="border py-2 px-3 flex content-center">
+          <img
+            style={{ width: 20, height: 20 }}
+            className="mr-2"
+            src={`http://www.google.com/s2/favicons?domain=${url}`}
+            alt=""
+          />
+          {title}
+        </td>
         <td className="border">
           <select
             value={groupToDisplay}
