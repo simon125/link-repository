@@ -143,7 +143,8 @@ const AppContainer = ({ currentUser }) => {
       )}
     </div>
   ) : (
-    <Redirect to="/" />
+    // <Redirect to="/" />
+    <>Loading...</>
   );
 };
 

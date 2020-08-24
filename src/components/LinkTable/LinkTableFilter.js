@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const LinkTableFilter = ({ availableGroups, filters, setFilters }) => {
   return (
-    <div className="flex my-5 justify-between">
+    <>
       <div className="w-1/3">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
@@ -61,7 +61,7 @@ const LinkTableFilter = ({ availableGroups, filters, setFilters }) => {
           ))}
         </select>
       </div>
-    </div>
+    </>
   );
 };
 
