@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { registerUser, loginUser } from '../../firebase/firebaseAuth';
+import {
+  registerUser,
+  loginUser,
+  resetPassword,
+} from '../../firebase/firebaseAuth';
+import { showToast } from '../../utils';
 
 const AuthForm = ({ currentUser }) => {
   const [email, setEmail] = useState({ value: '', error: null });
@@ -77,6 +82,19 @@ const AuthForm = ({ currentUser }) => {
     } else {
       setRepeatedPassword(data);
     }
+  };
+
+  const handleForgotPassword = () => {
+    resetPassword(email.value)
+      .then(() => {
+        showToast(
+          'Your password has been changed, check your email',
+          'success'
+        );
+      })
+      .catch((err) => {
+        showToast('Enter valid email', 'error');
+      });
   };
 
   return (
@@ -183,6 +201,7 @@ const AuthForm = ({ currentUser }) => {
 
             <div className="text-sm leading-5">
               <a
+                onClick={handleForgotPassword}
                 href="#"
                 className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
               >

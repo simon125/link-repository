@@ -28,3 +28,9 @@ export const loginUser = async (email, password) => {
 export const logOut = async () => {
   return auth.signOut();
 };
+
+export const resetPassword = async (email = '') => {
+  if (email && email.trim() !== '') {
+    return auth.sendPasswordResetEmail(email);
+  }
+};

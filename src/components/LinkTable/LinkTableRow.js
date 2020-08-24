@@ -41,7 +41,7 @@ const LinkTableRow = ({
 
   return (
     <>
-      <tr>
+      <tr title={url}>
         <td className="border text-center py-2">
           <button
             type="button"

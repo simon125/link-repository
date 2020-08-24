@@ -10,6 +10,7 @@ const style = {
     lineHeight: '40px',
     textAlign: 'center',
     color: '#333',
+    cursor: 'grab',
   },
 };
 
@@ -39,6 +40,7 @@ const LinkKanbanCard = ({
 
   return (
     <div
+      title={url}
       key={title}
       id={title}
       onDragStart={handleDragStart}
