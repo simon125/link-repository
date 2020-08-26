@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import {
   registerUser,
   loginUser,
@@ -200,13 +199,13 @@ const AuthForm = ({ currentUser }) => {
             </div>
 
             <div className="text-sm leading-5">
-              <a
+              <button
                 onClick={handleForgotPassword}
                 href="#"
                 className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
               >
                 Forgot your password?
-              </a>
+              </button>
             </div>
           </div>
 
@@ -245,7 +244,5 @@ function validateEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
-
-AuthForm.propTypes = {};
 
 export default AuthForm;

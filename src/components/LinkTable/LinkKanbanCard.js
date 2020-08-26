@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+
+const FAVICON_SERVICE_URL = 'http://www.google.com/s2/favicons?domain=';
 
 const style = {
   listItem: {
@@ -12,6 +13,15 @@ const style = {
     color: '#333',
     cursor: 'grab',
   },
+  cardContainer: { display: 'flex', justifyContent: 'center', paddingTop: 15 },
+  cardButton: { height: 30, width: 30, position: 'relative' },
+  iconContainer: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
+  logoImage: { width: 20, height: 20 },
 };
 
 const LinkKanbanCard = ({
@@ -38,6 +48,23 @@ const LinkKanbanCard = ({
     rowHandlers.updateLink(id, { group: e.target.value });
   };
 
+  const handleEditButtonClick = (e) => {
+    e.stopPropagation();
+    setLink({
+      description,
+      group,
+      status,
+      title,
+      url,
+      id,
+    });
+  };
+
+  const handleDeleteButtonClick = (e) => {
+    e.stopPropagation();
+    rowHandlers.removeLink(id);
+  };
+
   return (
     <div
       title={url}
@@ -48,12 +75,10 @@ const LinkKanbanCard = ({
       draggable={true}
       style={style.listItem}
     >
-      <div
-        style={{ display: 'flex', justifyContent: 'center', paddingTop: 15 }}
-      >
+      <div style={style.cardContainer}>
         <img
-          style={{ width: 20, height: 20 }}
-          src={`http://www.google.com/s2/favicons?domain=${url}`}
+          style={style.logoImage}
+          src={`${FAVICON_SERVICE_URL}${url}`}
           alt=""
         />
       </div>
@@ -74,73 +99,34 @@ const LinkKanbanCard = ({
       </select>
       <div className="border py-2 flex justify-around">
         <button
-          style={{ height: 30, width: 30, position: 'relative' }}
+          style={style.cardButton}
           type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setLink({
-              description,
-              group,
-              status,
-              title,
-              url,
-              id,
-            });
-          }}
+          onClick={handleEditButtonClick}
           className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
         >
-          <span
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            className="fas fa-pen"
-          />{' '}
+          <span style={style.iconContainer} className="fas fa-pen" />{' '}
         </button>
 
         <a
-          style={{ height: 30, width: 30, position: 'relative' }}
+          style={style.cardButton}
           href={url}
           target="_blank"
           rel="noopener noreferrer"
           className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
         >
-          <span
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            className="fas fa-link"
-          />{' '}
+          <span style={style.iconContainer} className="fas fa-link" />{' '}
         </a>
         <button
-          style={{ height: 30, width: 30, position: 'relative' }}
+          style={style.cardButton}
           type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            rowHandlers.removeLink(id);
-          }}
+          onClick={handleDeleteButtonClick}
           className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
         >
-          <span
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            className="fas fa-trash-alt "
-          />{' '}
+          <span style={style.iconContainer} className="fas fa-trash-alt " />{' '}
         </button>
       </div>
     </div>
   );
 };
-
-LinkKanbanCard.propTypes = {};
 
 export default LinkKanbanCard;

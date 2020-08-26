@@ -1,6 +1,37 @@
 import React, { useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import CustomSelectOption from './CustomSelectOption';
+
+const style = {
+  icon: {
+    zIndex: 1,
+    right: 10,
+    top: 10,
+    position: 'absolute',
+    cursor: 'pointer',
+  },
+  optionsContainer: (isOpen) => ({
+    display: isOpen ? 'block' : 'none',
+    position: 'absolute',
+    top: 38,
+    left: 0,
+    width: '100%',
+  }),
+  optionsList: {
+    width: '100%',
+    border: '1px solid #999',
+    borderBottom: 'none',
+    borderRadius: 3,
+    backgroundColor: 'white',
+    maxHeight: 150,
+    overflowY: 'auto',
+  },
+  newOptionForm: {
+    border: '1px solid #999',
+    borderRadius: 3,
+    backgroundColor: 'white',
+    borderTop: 'none',
+  },
+};
 
 const useOutsideAlerter = (ref, callback) => {
   useEffect(() => {
@@ -40,6 +71,8 @@ const CustomSelect = ({
     setNewOption('');
   };
 
+  const handleOptionChange = (e) => setNewOption(e.target.value);
+
   return (
     <div ref={wrapperRef}>
       <div className="flex">
@@ -66,36 +99,9 @@ const CustomSelect = ({
           style={{ cursor: 'pointer' }}
         />
         {error && <p className="text-red-500 text-xs italic">{error}</p>}
-        <span
-          style={{
-            zIndex: 1,
-            right: 10,
-            top: 10,
-            position: 'absolute',
-            cursor: 'pointer',
-          }}
-          className="fas fa-caret-down"
-        />
-        <div
-          style={{
-            display: isOpen ? 'block' : 'none',
-            position: 'absolute',
-            top: 38,
-            left: 0,
-            width: '100%',
-          }}
-        >
-          <ul
-            style={{
-              width: '100%',
-              border: '1px solid #999',
-              borderBottom: 'none',
-              borderRadius: 3,
-              backgroundColor: 'white',
-              maxHeight: 150,
-              overflowY: 'auto',
-            }}
-          >
+        <span style={style.icon} className="fas fa-caret-down" />
+        <div style={style.optionsContainer(isOpen)}>
+          <ul style={style.optionsList}>
             {options.map((option) => (
               <CustomSelectOption
                 key={option.id}
@@ -106,17 +112,12 @@ const CustomSelect = ({
             ))}
           </ul>
           <div
-            style={{
-              border: '1px solid #999',
-              borderRadius: 3,
-              backgroundColor: 'white',
-              borderTop: 'none',
-            }}
+            style={style.newOptionForm}
             className="custom-select__option--input flex"
           >
             <input
               value={newOption}
-              onChange={(e) => setNewOption(e.target.value)}
+              onChange={handleOptionChange}
               style={{ width: '60%' }}
               className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="link"
@@ -137,7 +138,5 @@ const CustomSelect = ({
     </div>
   );
 };
-
-CustomSelect.propTypes = {};
 
 export default CustomSelect;

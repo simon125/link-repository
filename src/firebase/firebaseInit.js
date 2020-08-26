@@ -1,13 +1,14 @@
 import firebase from 'firebase';
+debugger;
 const firebaseConfig = {
-  apiKey: 'AIzaSyA1i3lrHXvFPKj_EAZk5axjV928jVbTGng',
-  authDomain: 'link-repository.firebaseapp.com',
-  databaseURL: 'https://link-repository.firebaseio.com',
-  projectId: 'link-repository',
-  storageBucket: 'link-repository.appspot.com',
-  messagingSenderId: '479817988265',
-  appId: '1:479817988265:web:c3d9420f29ea600c5d51b8',
-  measurementId: 'G-0G9TZDNZC4',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 export const app = firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();

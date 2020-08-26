@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import './AppContainer.css';
 import LinkForm from '../LinkForm/LinkForm';
@@ -143,11 +142,8 @@ const AppContainer = ({ currentUser }) => {
       )}
     </div>
   ) : (
-    // <Redirect to="/" />
-    <>Loading...</>
+    <Redirect to="/" />
   );
 };
-
-AppContainer.propTypes = {};
 
 export default AppContainer;

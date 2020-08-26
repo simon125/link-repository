@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import LinkKanbanCard from './LinkKanbanCard';
 
 const style = {
@@ -7,6 +6,13 @@ const style = {
     backgroundColor: 'rgba(180, 210, 220,0.2)',
     minHeight: '90vh',
     width: '30%',
+  },
+  columnHeader: {
+    textAlign: 'center',
+    padding: 5,
+    backgroundColor: '#2d3748',
+    color: '#eee',
+    textTransform: 'uppercase',
   },
 };
 
@@ -23,7 +29,6 @@ const LinkKanbanColumn = ({
     handleDragLeave,
     handleDrop,
     handleDragOver,
-
     handleDragStart,
     handleDragEnd,
   } = handlers;
@@ -42,20 +47,11 @@ const LinkKanbanColumn = ({
       onDragOver={handleDragOver}
       style={style.listStyle}
     >
-      <p
-        style={{
-          textAlign: 'center',
-          padding: 5,
-          backgroundColor: '#2d3748',
-          color: '#eee',
-          textTransform: 'uppercase',
-        }}
-      >
-        {statusName}
-      </p>
+      <p style={style.columnHeader}>{statusName}</p>
       {rows.map((link) => {
         return (
           <LinkKanbanCard
+            key={link.id}
             availableGroups={availableGroups}
             setLink={setLink}
             rowHandlers={rowHandlers}
@@ -67,7 +63,5 @@ const LinkKanbanColumn = ({
     </div>
   );
 };
-
-LinkKanbanColumn.propTypes = {};
 
 export default LinkKanbanColumn;

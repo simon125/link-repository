@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const LinkTableFooter = (props) => {
   return (
@@ -16,7 +15,5 @@ const LinkTableFooter = (props) => {
     </div>
   );
 };
-
-LinkTableFooter.propTypes = {};
 
 export default LinkTableFooter;

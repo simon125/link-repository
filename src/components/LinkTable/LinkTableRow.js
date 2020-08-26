@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
+const FAVICON_SERVICE_URL = 'http://www.google.com/s2/favicons?domain=';
 const AVAILABLE_STATUSES = ['Already read', 'In progress', 'Not touched'];
 
 const LinkTableRow = ({
   description,
   group,
-  iframeFriendly,
   status,
   title,
   url,
@@ -14,7 +13,6 @@ const LinkTableRow = ({
   rowHandlers,
   availableGroups,
   setLink,
-  //   globalCheck,
 }) => {
   const [showDescription, setShowDescription] = useState(false);
   const [groupToDisplay, setGroupToDisplay] = useState(group);
@@ -39,16 +37,35 @@ const LinkTableRow = ({
     }
   };
 
+  const handleExpandButtonClick = (e) => {
+    e.stopPropagation();
+    setShowDescription(!showDescription);
+  };
+
+  const handleEditButtonClick = (e) => {
+    e.stopPropagation();
+    setLink({
+      description,
+      group,
+      status,
+      title,
+      url,
+      id,
+    });
+  };
+
+  const handleDeleteButtonClick = (e) => {
+    e.stopPropagation();
+    rowHandlers.removeLink(id);
+  };
+
   return (
     <>
       <tr title={url}>
         <td className="border text-center py-2">
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowDescription(!showDescription);
-            }}
+            onClick={handleExpandButtonClick}
             className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
           >
             {showDescription ? (
@@ -62,14 +79,13 @@ const LinkTableRow = ({
           <img
             style={{ width: 20, height: 20 }}
             className="mr-2"
-            src={`http://www.google.com/s2/favicons?domain=${url}`}
+            src={`${FAVICON_SERVICE_URL}${url}`}
             alt=""
           />
           {title}
         </td>
         <td className="border">
           <select
-            value={groupToDisplay}
             onChange={handleChange}
             style={{ height: 45 }}
             name="groupToDisplay"
@@ -77,7 +93,11 @@ const LinkTableRow = ({
             className={`shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500`}
           >
             {availableGroups.map((gr) => (
-              <option key={gr.id} value={gr.value}>
+              <option
+                selected={gr.value === group}
+                key={gr.id}
+                value={gr.value}
+              >
                 {gr.value}
               </option>
             ))}
@@ -85,7 +105,6 @@ const LinkTableRow = ({
         </td>
         <td className="border">
           <select
-            value={statusToDisplay}
             onChange={handleChange}
             style={{ height: 45 }}
             name="statusToDisplay"
@@ -93,7 +112,7 @@ const LinkTableRow = ({
             className={`shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500`}
           >
             {AVAILABLE_STATUSES.map((st) => (
-              <option key={st} value={st}>
+              <option selected={st === status} key={st} value={st}>
                 {st}
               </option>
             ))}
@@ -103,17 +122,7 @@ const LinkTableRow = ({
           <button
             style={{ height: 30, width: 30 }}
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setLink({
-                description,
-                group,
-                status,
-                title,
-                url,
-                id,
-              });
-            }}
+            onClick={handleEditButtonClick}
             className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
           >
             <span className="fas fa-pen" />{' '}
@@ -139,10 +148,7 @@ const LinkTableRow = ({
           <button
             style={{ height: 30, width: 30 }}
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              rowHandlers.removeLink(id);
-            }}
+            onClick={handleDeleteButtonClick}
             className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
           >
             <span className="fas fa-trash-alt " />{' '}
@@ -160,7 +166,5 @@ const LinkTableRow = ({
     </>
   );
 };
-
-LinkTableRow.propTypes = {};
 
 export default LinkTableRow;

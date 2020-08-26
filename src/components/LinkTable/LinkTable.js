@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import LinkTableFilter from './LinkTableFilter';
 import LinkTableRow from './LinkTableRow';
 import LinkKanbanColumn from './LinkKanbanColumn';
-import PropTypes from 'prop-types';
 import { removeLink, updateLink } from '../../firebase/firebaseCRUD';
 import kanbanIcon from '../../kanbanicon.png';
 
@@ -20,7 +19,6 @@ const LinkTable = (props) => {
     status: 'All',
     title: '',
   });
-  const [elements, setElements] = useState([]);
   const [draggedEl, setDraggedEl] = useState(null);
   const [kanbanView, setKanbanView] = useState(false);
 
@@ -54,33 +52,19 @@ const LinkTable = (props) => {
   };
 
   const handleDrop = (e) => {
-    if (
-      STATUSES.includes(e.target.id) ||
-      STATUSES.includes(e.target.parentElement.id)
-    ) {
-      const colNum = STATUSES.includes(e.target.id)
-        ? e.target.id
-        : e.target.parentElement.id;
+    const test1 = STATUSES.includes(e.target.id);
+    const test2 = STATUSES.includes(e.target.parentElement.id);
+    if (test1 || test2) {
+      const statusColumn = test1 ? e.target.id : e.target.parentElement.id;
 
-      setElements([
-        ...elements.filter((el) => {
-          if (el.title === draggedEl) {
-            updateLink(el.id, { ...el, status: colNum });
-          }
-          return el.title !== draggedEl;
-        }),
-        { name: draggedEl, status: colNum },
-      ]);
+      linksToDisplay.forEach((link) => {
+        if (link.title === draggedEl) {
+          updateLink(link.id, { ...link, status: statusColumn });
+        }
+      });
     }
     e.currentTarget.style.backgroundColor = 'rgba(180, 210, 220,0.2)';
   };
-
-  // backgroundColor: 'rgba(255,255,255,0.8)',
-  // backgroundColor: 'rgba(180, 210, 220,0.2)',
-
-  useEffect(() => {
-    setElements(linksToDisplay);
-  }, [linksToDisplay]);
 
   const rowHandlers = {
     removeLink,
@@ -155,16 +139,17 @@ const LinkTable = (props) => {
           }}
         >
           <div style={style.listContainer}>
-            {STATUSES.map((status) => (
+            {STATUSES.map((status, i) => (
               <LinkKanbanColumn
-                key={status}
+                key={status + i}
                 setLink={setLink}
                 availableGroups={availableGroups}
                 rowHandlers={rowHandlers}
                 statusName={status}
                 handlers={kanbanColumnHandlers}
-                rows={elements.filter((el) => el.status === status)}
-                // {...link}
+                rows={linksToDisplay
+                  .filter(bySetFilters)
+                  .filter((link) => link.status === status)}
               />
             ))}
           </div>
@@ -196,7 +181,5 @@ const LinkTable = (props) => {
     </div>
   );
 };
-
-LinkTable.propTypes = {};
 
 export default LinkTable;

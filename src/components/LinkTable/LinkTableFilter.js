@@ -1,7 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+const AVAILABLE_STATUSES = [
+  'All',
+  'Already read',
+  'In progress',
+  'Not touched',
+];
 
 const LinkTableFilter = ({ availableGroups, filters, setFilters }) => {
+  const handleFilterChange = (e) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
+
   return (
     <>
       <div className="w-1/3">
@@ -29,15 +39,16 @@ const LinkTableFilter = ({ availableGroups, filters, setFilters }) => {
           Status
         </label>
         <select
-          value={filters.status}
-          onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+          name="status"
+          onChange={handleFilterChange}
           className=" ml-2 shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500"
           id="grid-state"
         >
-          <option>All</option>
-          <option>Already read</option>
-          <option>In progress</option>
-          <option>Not touched</option>
+          {AVAILABLE_STATUSES.map((status, i) => (
+            <option value={status} key={status + i}>
+              {status}
+            </option>
+          ))}
         </select>
       </div>
       <div className="w-1/4">
@@ -48,8 +59,8 @@ const LinkTableFilter = ({ availableGroups, filters, setFilters }) => {
           Group
         </label>
         <select
-          value={filters.group}
-          onChange={(e) => setFilters({ ...filters, group: e.target.value })}
+          name="group"
+          onChange={handleFilterChange}
           className="ml-2 shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500"
           id="grid-state"
         >
@@ -64,7 +75,5 @@ const LinkTableFilter = ({ availableGroups, filters, setFilters }) => {
     </>
   );
 };
-
-LinkTableFilter.propTypes = {};
 
 export default LinkTableFilter;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import {
   addLink,
@@ -9,6 +8,8 @@ import {
   updateLink,
 } from '../../firebase/firebaseCRUD';
 import { showToast } from '../../utils';
+
+const VALID_URL_REGEXP = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
 
 const LinkForm = ({
   currentUser,
@@ -69,7 +70,7 @@ const LinkForm = ({
       : addLink(linkToProcess, currentUser);
 
     promise
-      .then((d) => {
+      .then(() => {
         const msg = id
           ? 'You successfully updated link'
           : 'You successfully added new link';
@@ -156,12 +157,22 @@ const LinkForm = ({
     if (url && url.trim() === '') {
       return false;
     }
-    const regexp = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
-    return regexp.test(url);
+    return VALID_URL_REGEXP.test(url);
   };
 
   const handleCancelClick = (e) => {
     resetForm();
+  };
+
+  const customSelectHandlers = {
+    handleChange: (e) => {
+      setGroup({ error: null, value: e.target.dataset.value });
+    },
+    removeGroup,
+    addGroup: (group) => addGroup(group, currentUser),
+    updateGroup: (id, optionName) => {
+      updateGroup(id, optionName);
+    },
   };
 
   return (
@@ -193,16 +204,7 @@ const LinkForm = ({
       </div>
       <div>
         <CustomSelect
-          handlers={{
-            handleChange: (e) => {
-              setGroup({ error: null, value: e.target.dataset.value });
-            },
-            removeGroup,
-            addGroup: (group) => addGroup(group, currentUser),
-            updateGroup: (id, optionName) => {
-              updateGroup(id, optionName);
-            },
-          }}
+          handlers={customSelectHandlers}
           options={availableGroups}
           value={group.value}
           error={group.error}
@@ -297,7 +299,5 @@ const LinkForm = ({
     </form>
   );
 };
-
-LinkForm.propTypes = {};
 
 export default LinkForm;

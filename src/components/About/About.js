@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const About = (props) => {
+const About = () => {
   return (
     <div style={{ padding: 50 }}>
       <h1>Welcome in link repository app</h1>
@@ -25,22 +24,17 @@ const About = (props) => {
         <li>[ ] pagination</li>
         <li>[ ] modal with detail and quick view</li>
         <li>[ ] view of link, tooltip with url?</li>
-        <li>[ ] mass delete</li>
         <li>
           [ ] batch job which change group name in links which are using deleted
           group
         </li>
         <li>[ ] validation for removing links and groups</li>
         <li>[ ] remember me btn</li>
-        <li>[ ] forgot password link</li>
         <li>[ ] login by fb/google/gh who knows :D </li>
         <li>[ ] fix eslint issues </li>
-        <li>[ ] !! R W D !! </li>
       </ul>
     </div>
   );
 };
-
-About.propTypes = {};
 
 export default About;

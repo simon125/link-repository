@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
+const FAVICON_SERVICE_URL = 'http://www.google.com/s2/favicons?domain=';
 const AVAILABLE_STATUSES = ['Already read', 'In progress', 'Not touched'];
 
 const LinkCard = ({
@@ -30,6 +30,24 @@ const LinkCard = ({
     }
   };
 
+  const handleEditButtonClick = (e) => {
+    e.stopPropagation();
+    rowHandlers.setLink({
+      description,
+      group,
+      status,
+      title,
+      url,
+      id,
+    });
+    rowHandlers.handleShowForm();
+  };
+
+  const handleDeleteButtonClick = (e) => {
+    e.stopPropagation();
+    rowHandlers.removeLink(id);
+  };
+
   return (
     <div
       style={{ width: '100%' }}
@@ -41,7 +59,7 @@ const LinkCard = ({
           <img
             style={{ width: 20, height: 20 }}
             className="mr-2"
-            src={`http://www.google.com/s2/favicons?domain=${url}`}
+            src={`${FAVICON_SERVICE_URL}${url}`}
             alt=""
           />
           {title}
@@ -81,18 +99,7 @@ const LinkCard = ({
           <button
             style={{ height: 30, width: 30 }}
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              rowHandlers.setLink({
-                description,
-                group,
-                status,
-                title,
-                url,
-                id,
-              });
-              rowHandlers.handleShowForm();
-            }}
+            onClick={handleEditButtonClick}
             className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
           >
             <span className="fas fa-pen" />{' '}
@@ -118,10 +125,7 @@ const LinkCard = ({
           <button
             style={{ height: 30, width: 30 }}
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              rowHandlers.removeLink(id);
-            }}
+            onClick={handleDeleteButtonClick}
             className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
           >
             <span className="fas fa-trash-alt " />{' '}
@@ -131,7 +135,5 @@ const LinkCard = ({
     </div>
   );
 };
-
-LinkCard.propTypes = {};
 
 export default LinkCard;
