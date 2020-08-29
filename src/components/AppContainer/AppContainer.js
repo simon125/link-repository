@@ -5,6 +5,11 @@ import LinkForm from '../LinkForm/LinkForm';
 import LinkTable from '../LinkTable/LinkTable';
 import LinkCards from '../LinkCards/LinkCards';
 import { db } from '../../firebase/firebaseInit';
+import {
+  setCollectionListener,
+  COLLECTION_LINKS,
+  COLLECTION_GROUPS,
+} from '../../firebase/firebaseCRUD';
 
 const AppContainer = ({ currentUser }) => {
   const [groups, setGroups] = useState([]);
@@ -15,36 +20,26 @@ const AppContainer = ({ currentUser }) => {
   const IS_SMALL_SCREEN = window.innerWidth < 650;
 
   useEffect(() => {
-    let unsubscribe = () => {};
-    let unsubscribe1 = () => {};
+    let unsubscribeGroupsListener = () => {};
+    let unsubscribeLinksListener = () => {};
     if (currentUser) {
-      unsubscribe = db
-        .collection('groups')
-        .where('userUid', '==', currentUser.uid)
-        .onSnapshot(function (querySnapshot) {
-          const options = [];
-          querySnapshot.forEach(function (doc) {
-            options.push({ ...doc.data(), id: doc.id });
-          });
-          setGroups(options);
-        });
-      unsubscribe1 = db
-        .collection('links')
-        .where('userUid', '==', currentUser.uid)
-        .onSnapshot(function (querySnapshot) {
-          const links = [];
-          querySnapshot.forEach(function (doc) {
-            links.push({ ...doc.data(), id: doc.id });
-          });
-          setLinksToDisplay(links);
-        });
+      unsubscribeGroupsListener = setCollectionListener(
+        COLLECTION_GROUPS,
+        currentUser.uid,
+        setGroups
+      );
+      unsubscribeLinksListener = setCollectionListener(
+        COLLECTION_LINKS,
+        currentUser.uid,
+        setLinksToDisplay
+      );
     } else {
       setGroups([]);
       setLinksToDisplay([]);
     }
     return () => {
-      unsubscribe();
-      unsubscribe1();
+      unsubscribeGroupsListener();
+      unsubscribeLinksListener();
     };
   }, [currentUser, link]);
 
