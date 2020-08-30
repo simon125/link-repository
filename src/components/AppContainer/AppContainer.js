@@ -29,6 +29,7 @@ const AppContainer = ({ currentUser }) => {
   const [linksToDisplay, setLinksToDisplay] = useState([]);
   const [link, setLink] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(null);
 
   const IS_SMALL_SCREEN = window.innerWidth < 650;
 
@@ -36,6 +37,7 @@ const AppContainer = ({ currentUser }) => {
     let unsubscribeGroupsListener = () => {};
     let unsubscribeLinksListener = () => {};
     if (currentUser) {
+      setShowSpinner(true);
       unsubscribeGroupsListener = setCollectionListener(
         COLLECTION_GROUPS,
         currentUser.uid,
@@ -44,7 +46,10 @@ const AppContainer = ({ currentUser }) => {
       unsubscribeLinksListener = setCollectionListener(
         COLLECTION_LINKS,
         currentUser.uid,
-        setLinksToDisplay
+        (collection) => {
+          setLinksToDisplay(collection);
+          setShowSpinner(false);
+        }
       );
     } else {
       setGroups([]);
@@ -85,6 +90,7 @@ const AppContainer = ({ currentUser }) => {
             />
           ) : (
             <LinkTable
+              showSpinner={showSpinner}
               setLink={setLink}
               linksToDisplay={linksToDisplay}
               availableGroups={groups}

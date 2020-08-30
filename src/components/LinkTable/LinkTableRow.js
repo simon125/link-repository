@@ -1,40 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const FAVICON_SERVICE_URL = 'http://www.google.com/s2/favicons?domain=';
 const AVAILABLE_STATUSES = ['Already read', 'In progress', 'Not touched'];
 
-const LinkTableRow = ({
-  description,
-  group,
-  status,
-  title,
-  url,
-  id,
-  rowHandlers,
-  availableGroups,
-  setLink,
-}) => {
-  const [showDescription, setShowDescription] = useState(false);
-  const [groupToDisplay, setGroupToDisplay] = useState(group);
-  const [statusToDisplay, setStatusToDisplay] = useState(status);
+const LinkTableRow = (props) => {
+  const {
+    link: { description, group, status, title, url, id },
+    rowHandlers,
+    availableGroups,
+    setLink,
+  } = props;
 
-  useEffect(() => {
-    setGroupToDisplay(group);
-    setStatusToDisplay(status);
-  }, [group, status]);
+  const [showDescription, setShowDescription] = useState(false);
 
   const handleChange = (e) => {
-    switch (e.target.name) {
-      case 'groupToDisplay':
-        setGroupToDisplay(e.target.value);
-        rowHandlers.updateLink(id, { group: e.target.value });
-        break;
-      case 'statusToDisplay':
-        setStatusToDisplay(e.target.value);
-        rowHandlers.updateLink(id, { status: e.target.value });
-        break;
-      default:
-    }
+    rowHandlers.updateLink(id, { [e.target.name]: e.target.value });
   };
 
   const handleExpandButtonClick = (e) => {
@@ -44,14 +24,7 @@ const LinkTableRow = ({
 
   const handleEditButtonClick = (e) => {
     e.stopPropagation();
-    setLink({
-      description,
-      group,
-      status,
-      title,
-      url,
-      id,
-    });
+    setLink(props.link);
   };
 
   const handleDeleteButtonClick = (e) => {
@@ -86,18 +59,14 @@ const LinkTableRow = ({
         </td>
         <td className="border">
           <select
+            defaultValue={group}
             onChange={handleChange}
             style={{ height: 45 }}
-            name="groupToDisplay"
-            id="groupToDisplay"
+            name="group"
             className={`shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500`}
           >
             {availableGroups.map((gr) => (
-              <option
-                selected={gr.value === group}
-                key={gr.id}
-                value={gr.value}
-              >
+              <option key={gr.id} value={gr.value}>
                 {gr.value}
               </option>
             ))}
@@ -105,14 +74,14 @@ const LinkTableRow = ({
         </td>
         <td className="border">
           <select
+            defaultValue={status}
             onChange={handleChange}
             style={{ height: 45 }}
-            name="statusToDisplay"
-            id="statusToDisplay"
+            name="status"
             className={`shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500`}
           >
             {AVAILABLE_STATUSES.map((st) => (
-              <option selected={st === status} key={st} value={st}>
+              <option key={st} value={st}>
                 {st}
               </option>
             ))}

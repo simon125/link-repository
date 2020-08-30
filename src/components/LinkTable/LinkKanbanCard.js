@@ -84,7 +84,7 @@ const LinkKanbanCard = ({
       </div>
       {title}
       <select
-        value={groupToDisplay}
+        defaultValue={groupToDisplay}
         onChange={handleChange}
         style={{ height: 45 }}
         name="groupToDisplay"

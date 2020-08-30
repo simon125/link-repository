@@ -14,9 +14,21 @@ const AuthForm = ({ currentUser }) => {
     error: null,
   });
   const [isRegisterForm, setIsRegisterForm] = useState(true);
+  const [isRemembered, setIsRemembered] = useState(false);
 
   useEffect(() => {
-    if (currentUser) {
+    const linkrepositoryEmail = localStorage.getItem('linkrepositoryEmail');
+    const linkrepositoryPassword = localStorage.getItem(
+      'linkrepositoryPassword'
+    );
+    debugger;
+    if (linkrepositoryEmail && linkrepositoryPassword) {
+      setEmail({ value: linkrepositoryEmail, error: null });
+      setPassword({ value: linkrepositoryPassword, error: null });
+      setIsRemembered(true);
+      setIsRegisterForm(false);
+    }
+    if (currentUser && !(linkrepositoryEmail && linkrepositoryPassword)) {
       const cleanState = { value: '', error: null };
       setEmail(cleanState);
       setPassword(cleanState);
@@ -96,6 +108,33 @@ const AuthForm = ({ currentUser }) => {
       });
   };
 
+  const handleRememberMeChange = (e) => {
+    if (e.target.checked && !isRemembered) {
+      setIsRemembered(true);
+      const isEmailValid = validateEmail(email.value);
+      if (!isEmailValid) {
+        setEmail({ ...email, error: 'Please enter proper email' });
+      }
+      const isPasswordStrong = password.value && password.value.length >= 8;
+      if (!isPasswordStrong && isRegisterForm) {
+        setPassword({ ...password, error: 'Password is to weak!' });
+      }
+      if (isEmailValid && isPasswordStrong) {
+        debugger;
+        localStorage.setItem('linkrepositoryEmail', email.value);
+        localStorage.setItem('linkrepositoryPassword', password.value);
+      }
+    } else {
+      localStorage.removeItem('linkrepositoryEmail');
+      localStorage.removeItem('linkrepositoryPassword');
+      const cleanState = { value: '', error: null };
+      setEmail(cleanState);
+      setPassword(cleanState);
+      setRepeatedPassword(cleanState);
+      setIsRemembered(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
@@ -135,6 +174,7 @@ const AuthForm = ({ currentUser }) => {
                 aria-label="Email address"
                 name="email"
                 type="email"
+                value={email.value}
                 required
                 className={`${
                   email.error && 'border-red-500'
@@ -151,6 +191,7 @@ const AuthForm = ({ currentUser }) => {
                 aria-label="Password"
                 name="password"
                 type="password"
+                value={password.value}
                 required
                 className={`${
                   password.error && 'border-red-500'
@@ -168,6 +209,7 @@ const AuthForm = ({ currentUser }) => {
                   aria-label="Repeat Password"
                   name="repeatedPassword"
                   type="password"
+                  value={repeatedPassword.value}
                   required
                   className={`${
                     repeatedPassword.error && 'border-red-500'
@@ -186,6 +228,8 @@ const AuthForm = ({ currentUser }) => {
           <div className="mt-6 flex items-center justify-between">
             <div className="flex items-center">
               <input
+                checked={isRemembered}
+                onChange={handleRememberMeChange}
                 id="remember_me"
                 type="checkbox"
                 className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"

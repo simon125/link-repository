@@ -68,7 +68,7 @@ const LinkCard = ({
       </div>
       <div className="px-6 py-4">
         <select
-          value={groupToDisplay}
+          defaultValue={groupToDisplay}
           onChange={handleChange}
           style={{ height: 45 }}
           name="groupToDisplay"
@@ -82,7 +82,7 @@ const LinkCard = ({
           ))}
         </select>
         <select
-          value={statusToDisplay}
+          defaultValue={statusToDisplay}
           onChange={handleChange}
           style={{ height: 45 }}
           name="statusToDisplay"

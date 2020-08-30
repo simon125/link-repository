@@ -4,21 +4,33 @@ import LinkTableRow from './LinkTableRow';
 import LinkKanbanColumn from './LinkKanbanColumn';
 import { removeLink, updateLink } from '../../firebase/firebaseCRUD';
 import kanbanIcon from '../../kanbanicon.png';
+import GridLoader from 'react-spinners/ClipLoader';
 
 const STATUSES = ['Not touched', 'In progress', 'Already read'];
 
 const style = {
   listContainer: { display: 'flex', justifyContent: 'space-around' },
+  tableHeaderCell: {
+    background: 'transparent',
+    border: 'none',
+    outline: 'none',
+  },
 };
 
 const LinkTable = (props) => {
-  const { linksToDisplay = [], availableGroups, setLink } = props;
+  const { linksToDisplay = [], availableGroups, setLink, showSpinner } = props;
 
   const [filters, setFilters] = useState({
     group: 'All',
     status: 'All',
     title: '',
   });
+  // TODO: consider more elegant implementation for sort
+  //  const [sortState, setSortState] = useState(null);
+  const [titleSort, setTitleSort] = useState(null);
+  const [groupSort, setGroupSort] = useState(null);
+  const [statusSort, setStatusSort] = useState(null);
+
   const [draggedEl, setDraggedEl] = useState(null);
   const [kanbanView, setKanbanView] = useState(false);
 
@@ -97,6 +109,41 @@ const LinkTable = (props) => {
     return groupMatch && titleMatch && statusMatch;
   };
 
+  // TODO: consider more elegant implementation for sort
+  const bySetParams = (link1, link2) => {
+    if (titleSort !== null) {
+      return titleSort
+        ? link1.title.localeCompare(link2.title)
+        : link2.title.localeCompare(link1.title);
+    } else if (groupSort !== null) {
+      return groupSort
+        ? link1.group.localeCompare(link2.group)
+        : link2.group.localeCompare(link1.group);
+    } else if (statusSort !== null) {
+      return statusSort
+        ? link1.status.localeCompare(link2.status)
+        : link2.status.localeCompare(link1.status);
+    }
+  };
+
+  const handleTitleClick = (e) => {
+    setTitleSort(!titleSort);
+    setStatusSort(null);
+    setGroupSort(null);
+  };
+
+  const handleGroupClick = (e) => {
+    setTitleSort(null);
+    setStatusSort(null);
+    setGroupSort(!groupSort);
+  };
+
+  const handleStatusClick = () => {
+    setTitleSort(null);
+    setStatusSort(!statusSort);
+    setGroupSort(null);
+  };
+
   return (
     <div className="rounded overflow-hidden shadow-lg p-5">
       <div className="flex my-5 justify-between">
@@ -159,25 +206,77 @@ const LinkTable = (props) => {
           <thead>
             <tr>
               <th className="border px-4 py-2"></th>
-              <th className="border px-4 py-2">Title</th>
-              <th className="border px-4 py-2">Group</th>
-              <th className="border px-4 py-2">Status</th>
+              <th className="border px-4 py-2">
+                <button
+                  onClick={handleTitleClick}
+                  style={style.tableHeaderCell}
+                >
+                  Title
+                  {titleSort === true && (
+                    <span className="ml-2 fas fa-long-arrow-alt-down" />
+                  )}
+                  {titleSort === false && (
+                    <span className="ml-2 fas fa-long-arrow-alt-up" />
+                  )}
+                </button>{' '}
+              </th>
+              <th className="border px-4 py-2">
+                <button
+                  onClick={handleGroupClick}
+                  style={style.tableHeaderCell}
+                >
+                  Group
+                  {groupSort === true && (
+                    <span className="ml-2 fas fa-long-arrow-alt-down" />
+                  )}
+                  {groupSort === false && (
+                    <span className="ml-2 fas fa-long-arrow-alt-up" />
+                  )}
+                </button>
+              </th>
+              <th className="border px-4 py-2">
+                <button
+                  onClick={handleStatusClick}
+                  style={style.tableHeaderCell}
+                >
+                  Status
+                  {statusSort === true && (
+                    <span className="ml-2 fas fa-long-arrow-alt-down" />
+                  )}
+                  {statusSort === false && (
+                    <span className="ml-2 fas fa-long-arrow-alt-up" />
+                  )}
+                </button>
+              </th>
               <th className="border px-4 py-2" colSpan="2"></th>
             </tr>
           </thead>
           <tbody>
-            {linksToDisplay.filter(bySetFilters).map((link) => (
-              <LinkTableRow
-                key={link.id}
-                setLink={setLink}
-                availableGroups={availableGroups}
-                rowHandlers={rowHandlers}
-                {...link}
-              />
-            ))}
+            {linksToDisplay
+              .filter(bySetFilters)
+              .sort(bySetParams)
+              .map((link) => (
+                <LinkTableRow
+                  key={link.id}
+                  setLink={setLink}
+                  availableGroups={availableGroups}
+                  rowHandlers={rowHandlers}
+                  link={link}
+                />
+              ))}
           </tbody>
         </table>
       )}
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: 30,
+        }}
+      >
+        <GridLoader size={100} color={'#123abc'} loading={showSpinner} />
+      </div>
     </div>
   );
 };
