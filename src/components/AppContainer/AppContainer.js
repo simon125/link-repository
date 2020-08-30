@@ -4,12 +4,25 @@ import './AppContainer.css';
 import LinkForm from '../LinkForm/LinkForm';
 import LinkTable from '../LinkTable/LinkTable';
 import LinkCards from '../LinkCards/LinkCards';
-import { db } from '../../firebase/firebaseInit';
 import {
   setCollectionListener,
   COLLECTION_LINKS,
   COLLECTION_GROUPS,
 } from '../../firebase/firebaseCRUD';
+
+const style = {
+  smallScreenBtnPanel: {
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    background: '#2d3748',
+    width: '100%',
+    height: 'fit-content',
+  },
+  linksButton: { width: '40%', fontSize: 13 },
+  addLinkButton: { width: '40%', fontSize: 13 },
+  button: { width: '40%' },
+};
 
 const AppContainer = ({ currentUser }) => {
   const [groups, setGroups] = useState([]);
@@ -80,21 +93,11 @@ const AppContainer = ({ currentUser }) => {
         </div>
       )}
       {IS_SMALL_SCREEN && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            background: '#2d3748',
-            width: '100%',
-            height: 'fit-content',
-          }}
-          className="flex justify-end p-2"
-        >
+        <div style={style.smallScreenBtnPanel} className="flex justify-end p-2">
           {showForm ? (
             <button
               onClick={handleHideForm}
-              style={{ width: '40%', fontSize: 13 }}
+              style={style.linksButton}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-1 ml-1 rounded focus:outline-none focus:shadow-outline"
               type="button"
             >
@@ -103,21 +106,21 @@ const AppContainer = ({ currentUser }) => {
           ) : (
             <>
               <button
-                style={{ width: '40%' }}
+                style={style.button}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 mx-1 rounded focus:outline-none focus:shadow-outline"
                 type="button"
               >
                 {'<'}
               </button>
               <button
-                style={{ width: '40%' }}
+                style={style.button}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 mx-1 rounded focus:outline-none focus:shadow-outline"
                 type="button"
               >
                 {'>'}
               </button>
               <button
-                style={{ width: '40%' }}
+                style={style.button}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 mx-1 rounded focus:outline-none focus:shadow-outline"
                 type="button"
               >
@@ -125,7 +128,7 @@ const AppContainer = ({ currentUser }) => {
               </button>
               <button
                 onClick={handleShowForm}
-                style={{ width: '40%', fontSize: 13 }}
+                style={style.addLinkButton}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 ml-1 rounded focus:outline-none focus:shadow-outline"
                 type="button"
               >
