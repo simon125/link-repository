@@ -21,7 +21,6 @@ const AuthForm = ({ currentUser }) => {
     const linkrepositoryPassword = localStorage.getItem(
       'linkrepositoryPassword'
     );
-    debugger;
     if (linkrepositoryEmail && linkrepositoryPassword) {
       setEmail({ value: linkrepositoryEmail, error: null });
       setPassword({ value: linkrepositoryPassword, error: null });
@@ -120,7 +119,6 @@ const AuthForm = ({ currentUser }) => {
         setPassword({ ...password, error: 'Password is to weak!' });
       }
       if (isEmailValid && isPasswordStrong) {
-        debugger;
         localStorage.setItem('linkrepositoryEmail', email.value);
         localStorage.setItem('linkrepositoryPassword', password.value);
       }
