@@ -11,6 +11,7 @@ const CustomSelectOption = ({
     updateGroup,
   },
 }) => {
+  const isMobileDevice = window.innerWidth < 600;
   const [isEditMode, setIsEditMode] = useState(false);
   const [optionName, setOptionName] = useState(option.value);
 
@@ -85,22 +86,14 @@ const CustomSelectOption = ({
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
-            {window.innerWidth < 600 ? (
-              <span className="fa fa-check" />
-            ) : (
-              'Save'
-            )}
+            {isMobileDevice ? <span className="fa fa-check" /> : 'Save'}
           </button>
           <button
             onClick={handleCancelClick}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
-            {window.innerWidth < 600 ? (
-              <span className="fa fa-times" />
-            ) : (
-              'Cancel'
-            )}
+            {isMobileDevice ? <span className="fa fa-times" /> : 'Cancel'}
           </button>
         </li>
       )}
