@@ -4,7 +4,7 @@ import {
   loginUser,
   resetPassword,
 } from '../../firebase/firebaseAuth';
-import { showToast } from '../../utils';
+import showToast from '../../utils';
 
 const AuthForm = ({ currentUser }) => {
   const [email, setEmail] = useState({ value: '', error: null });

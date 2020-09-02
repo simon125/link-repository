@@ -73,7 +73,7 @@ const LinkCard = ({
           style={{ height: 45 }}
           name="groupToDisplay"
           id="groupToDisplay"
-          className={`shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500`}
+          className="shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500"
         >
           {availableGroups.map((gr) => (
             <option key={gr.id} value={gr.value}>
@@ -87,7 +87,7 @@ const LinkCard = ({
           style={{ height: 45 }}
           name="statusToDisplay"
           id="statusToDisplay"
-          className={`shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500`}
+          className="shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500"
         >
           {AVAILABLE_STATUSES.map((st) => (
             <option key={st} value={st}>

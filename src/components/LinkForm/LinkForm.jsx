@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CustomSelect from '../CustomSelect/CustomSelect';
+
 import {
   addLink,
   addGroup,
@@ -7,7 +7,8 @@ import {
   updateGroup,
   updateLink,
 } from '../../firebase/firebaseCRUD';
-import { showToast } from '../../utils';
+import showToast from '../../utils';
+import CustomSelect from '../CustomSelect/CustomSelect';
 
 const VALID_URL_REGEXP = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
 
@@ -130,8 +131,15 @@ const LinkForm = ({
     );
   };
 
+  const validateURL = (url) => {
+    if (url && url.trim() === '') {
+      return false;
+    }
+    return VALID_URL_REGEXP.test(url);
+  };
+
   const handleChange = (e) => {
-    const value = e.target.value;
+    const { value } = e.target;
     const error = null;
     switch (e.target.name) {
       case 'link':
@@ -151,13 +159,6 @@ const LinkForm = ({
         break;
       default:
     }
-  };
-
-  const validateURL = (url) => {
-    if (url && url.trim() === '') {
-      return false;
-    }
-    return VALID_URL_REGEXP.test(url);
   };
 
   const handleCancelClick = (e) => {
@@ -276,7 +277,7 @@ const LinkForm = ({
           name="description"
           type="text"
           placeholder="Description"
-        ></textarea>
+        />
         {description.error && (
           <p className="text-red-500 text-xs italic">{description.error}</p>
         )}

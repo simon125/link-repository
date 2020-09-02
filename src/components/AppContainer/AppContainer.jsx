@@ -1,14 +1,17 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
+
 import { Redirect } from 'react-router-dom';
+
 import './AppContainer.css';
-import LinkForm from '../LinkForm/LinkForm';
-import LinkTable from '../LinkTable/LinkTable';
-import LinkCards from '../LinkCards/LinkCards';
 import {
   setCollectionListener,
   COLLECTION_LINKS,
   COLLECTION_GROUPS,
 } from '../../firebase/firebaseCRUD';
+import LinkCards from '../LinkCards/LinkCards';
+import LinkForm from '../LinkForm/LinkForm';
+import LinkTable from '../LinkTable/LinkTable';
 
 const style = {
   smallScreenBtnPanel: {
@@ -66,7 +69,7 @@ const AppContainer = ({ currentUser }) => {
   };
   const handleHideForm = () => setShowForm(false);
 
-  return !!currentUser ? (
+  return currentUser ? (
     <div className="flex justify-around  relative flex-col lg:flex-row xl:flex-row items-center lg:items-start xl:items-start">
       <div className="w-full lg:w-2/5 xl:w-2/5 lg:p-3 xl:p-3">
         {((showForm && IS_SMALL_SCREEN) || !IS_SMALL_SCREEN) && (
@@ -146,7 +149,8 @@ const AppContainer = ({ currentUser }) => {
       )}
     </div>
   ) : (
-    <Redirect to="/" />
+    // <Redirect to="/" />
+    <h1>LOADING...</h1>
   );
 };
 

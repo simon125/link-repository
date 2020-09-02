@@ -18,7 +18,7 @@ const About = () => {
         for YOU
       </p>
       <h3>link-repository 1.0.0</h3>
-      <h4>TODO:</h4>{' '}
+      <h4>TODO:</h4>
       <ul>
         <li>[ ] unit tests</li>
         <li>[ ] pagination</li>

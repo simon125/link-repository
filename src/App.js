@@ -1,12 +1,16 @@
+/* eslint-disable react/jsx-filename-extension */
 import React, { useState, useEffect } from 'react';
+
 import './App.css';
-import Navigation from './components/Navigation/Navigation';
-import AuthForm from './components/AuthForm/AuthForm';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+
 import About from './components/About/About';
 import AppContainer from './components/AppContainer/AppContainer';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import AuthForm from './components/AuthForm/AuthForm';
+import Navigation from './components/Navigation/Navigation';
 import { app } from './firebase/firebaseInit';
-import { ToastContainer } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {

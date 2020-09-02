@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable max-len */
 import React, { useState } from 'react';
 
 const CustomSelectOption = ({
@@ -60,14 +63,14 @@ const CustomSelectOption = ({
               onClick={handleEditClick}
               className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
             >
-              <span className="fas fa-pen" />{' '}
+              <span className="fas fa-pen" />
             </button>
             <button
               type="button"
               onClick={handleDeleteClick}
               className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
             >
-              <span className="fas fa-trash-alt " />{' '}
+              <span className="fas fa-trash-alt " />
             </button>
           </div>
         </li>

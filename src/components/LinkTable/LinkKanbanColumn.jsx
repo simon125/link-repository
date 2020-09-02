@@ -25,10 +25,10 @@ const LinkKanbanColumn = ({
   setLink,
 }) => {
   const {
-    handleDragEnter,
-    handleDragLeave,
-    handleDrop,
-    handleDragOver,
+    handleDragEnter, //
+    handleDragLeave, //
+    handleDrop, //
+    handleDragOver, //
     handleDragStart,
     handleDragEnd,
   } = handlers;
