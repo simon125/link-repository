@@ -24,10 +24,9 @@ const AppContainer = ({ currentUser }) => {
 
   const IS_SMALL_SCREEN = window.innerWidth < 650;
 
-  let unsubscribeGroupsListener = () => {};
-  let unsubscribeLinksListener = () => {};
-
   useEffect(() => {
+    let unsubscribeGroupsListener = () => {};
+    let unsubscribeLinksListener = () => {};
     if (currentUser) {
       setShowSpinner(true);
       unsubscribeGroupsListener = setCollectionListener(
