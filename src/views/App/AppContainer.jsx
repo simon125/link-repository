@@ -2,19 +2,59 @@
 import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
-// import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import './AppContainer.css';
 import LinkForm from '../../components/LinkForm/LinkForm';
 import MobileFooter from '../../components/MobileFooter/MobileFooter';
 import MobileLinksCards from '../../components/MobileLinksCards/MobileLinksCards';
+import {
+  setCollectionListener,
+  COLLECTION_LINKS,
+  COLLECTION_GROUPS,
+} from '../../firebase/firebaseCRUD';
 import Links from './Links';
 
-const AppContainer = ({ currentUser, linksToDisplay, groups, showSpinner }) => {
+const AppContainer = ({ currentUser }) => {
+  const [groups, setGroups] = useState([]);
+  const [linksToDisplay, setLinksToDisplay] = useState([]);
   const [linkToEdit, setLinkToEdit] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(null);
 
   const IS_SMALL_SCREEN = window.innerWidth < 650;
+
+  let unsubscribeGroupsListener = () => {};
+  let unsubscribeLinksListener = () => {};
+
+  useEffect(() => {
+    if (currentUser) {
+      setShowSpinner(true);
+      unsubscribeGroupsListener = setCollectionListener(
+        COLLECTION_GROUPS,
+        currentUser.uid,
+        setGroups,
+      );
+      unsubscribeLinksListener = setCollectionListener(
+        COLLECTION_LINKS,
+        currentUser.uid,
+        (collection) => {
+          setLinksToDisplay(collection);
+          setShowSpinner(false);
+        },
+      );
+    } else {
+      setGroups([]);
+      setLinksToDisplay([]);
+      unsubscribeGroupsListener();
+      unsubscribeLinksListener();
+    }
+
+    return () => {
+      unsubscribeGroupsListener();
+      unsubscribeLinksListener();
+    };
+  }, [currentUser]);
 
   const handleShowForm = () => {
     setShowForm(true);
@@ -62,23 +102,17 @@ const AppContainer = ({ currentUser, linksToDisplay, groups, showSpinner }) => {
       )}
     </div>
   ) : (
-    // <Redirect to="/" />
-    <h1>LOADING...</h1>
+    <Redirect to="/" />
   );
 };
 
 AppContainer.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   currentUser: PropTypes.object,
-  linksToDisplay: PropTypes.arrayOf(PropTypes.object),
-  groups: PropTypes.arrayOf(PropTypes.object),
-  showSpinner: PropTypes.bool.isRequired,
 };
 
 AppContainer.defaultProps = {
   currentUser: null,
-  linksToDisplay: [],
-  groups: [],
 };
 
 export default AppContainer;

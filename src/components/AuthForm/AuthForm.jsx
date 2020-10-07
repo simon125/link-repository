@@ -99,7 +99,6 @@ const AuthForm = ({ currentUser }) => {
 
   const handleRememberMeChange = (e) => {
     if (e.target.checked && !isRemembered) {
-      setIsRemembered(true);
       const isEmailValid = validateEmail(email.value);
       if (!isEmailValid) {
         setEmail({ ...email, error: 'Please enter proper email' });
@@ -111,6 +110,7 @@ const AuthForm = ({ currentUser }) => {
       if (isEmailValid && isPasswordStrong) {
         localStorage.setItem('linkrepositoryEmail', email.value);
         localStorage.setItem('linkrepositoryPassword', password.value);
+        setIsRemembered(true);
       }
     } else {
       localStorage.removeItem('linkrepositoryEmail');

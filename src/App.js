@@ -7,11 +7,6 @@ import { ToastContainer } from 'react-toastify';
 
 import AuthForm from './components/AuthForm/AuthForm';
 import Navigation from './components/Navigation/Navigation';
-import {
-  setCollectionListener,
-  COLLECTION_LINKS,
-  COLLECTION_GROUPS,
-} from './firebase/firebaseCRUD';
 import { app } from './firebase/firebaseInit';
 import About from './views/About/About';
 import AppContainer from './views/App/AppContainer';
@@ -20,12 +15,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
-  const [groups, setGroups] = useState([]);
-  const [linksToDisplay, setLinksToDisplay] = useState([]);
-  const [showSpinner, setShowSpinner] = useState(null);
-
-  let unsubscribeGroupsListener = () => {};
-  let unsubscribeLinksListener = () => {};
 
   useEffect(() => {
     const unregisterAuthObserver = app.auth().onAuthStateChanged((user) => {
@@ -34,35 +23,9 @@ function App() {
       } else {
         setCurrentUser(null);
       }
-
-      if (currentUser) {
-        setShowSpinner(true);
-        unsubscribeGroupsListener = setCollectionListener(
-          COLLECTION_GROUPS,
-          currentUser.uid,
-          setGroups,
-        );
-        unsubscribeLinksListener = setCollectionListener(
-          COLLECTION_LINKS,
-          currentUser.uid,
-          (collection) => {
-            setLinksToDisplay(collection);
-            setShowSpinner(false);
-          },
-        );
-      } else {
-        setGroups([]);
-        setLinksToDisplay([]);
-        unsubscribeGroupsListener();
-        unsubscribeLinksListener();
-      }
-      return () => {
-        unsubscribeGroupsListener();
-        unsubscribeLinksListener();
-      };
     });
     return () => unregisterAuthObserver();
-  }, [currentUser]);
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -80,14 +43,7 @@ function App() {
           />
           <Route
             path="/app"
-            component={() => (
-              <AppContainer
-                currentUser={currentUser}
-                groups={groups}
-                linksToDisplay={linksToDisplay}
-                showSpinner={showSpinner}
-              />
-            )}
+            component={() => <AppContainer currentUser={currentUser} />}
           />
           <Route path="/about" component={About} />
         </Switch>
