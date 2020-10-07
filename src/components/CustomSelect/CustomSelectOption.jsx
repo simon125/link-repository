@@ -1,15 +1,14 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable max-len */
 import React, { useState } from 'react';
+
+import PropTypes from 'prop-types';
 
 const CustomSelectOption = ({
   option,
   isEditModeOnGlobal,
-  handlers: {
-    handleChange,
-    setIsOpen,
-    removeGroup,
-    setIsEditModeOnGlobal,
-    updateGroup,
-  },
+  handlers: { handleChange, setIsOpen, removeGroup, setIsEditModeOnGlobal, updateGroup },
 }) => {
   const isMobileDevice = window.innerWidth < 600;
   const [isEditMode, setIsEditMode] = useState(false);
@@ -60,14 +59,14 @@ const CustomSelectOption = ({
               onClick={handleEditClick}
               className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
             >
-              <span className="fas fa-pen" />{' '}
+              <span className="fas fa-pen" />
             </button>
             <button
               type="button"
               onClick={handleDeleteClick}
               className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
             >
-              <span className="fas fa-trash-alt " />{' '}
+              <span className="fas fa-trash-alt " />
             </button>
           </div>
         </li>
@@ -99,6 +98,19 @@ const CustomSelectOption = ({
       )}
     </>
   );
+};
+
+CustomSelectOption.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  option: PropTypes.object.isRequired,
+  isEditModeOnGlobal: PropTypes.bool.isRequired,
+  handlers: PropTypes.shape({
+    handleChange: PropTypes.func,
+    setIsOpen: PropTypes.func,
+    removeGroup: PropTypes.func,
+    setIsEditModeOnGlobal: PropTypes.func,
+    updateGroup: PropTypes.func,
+  }).isRequired,
 };
 
 export default CustomSelectOption;

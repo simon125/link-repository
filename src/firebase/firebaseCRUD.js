@@ -38,7 +38,7 @@ export const updateGroup = (id, optionName) => {
 export const setCollectionListener = (
   collectionName,
   userUid,
-  setCollection
+  setCollection,
 ) => {
   return db
     .collection(collectionName)

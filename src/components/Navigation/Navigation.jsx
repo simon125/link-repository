@@ -1,8 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { logOut } from '../../firebase/firebaseAuth';
 
-const Navigation = ({ currentUser }) => {
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+import { logOut } from '../../firebase/firebaseAuth';
+import routes from '../../routes';
+
+const style = {
+  mobileNavigation: {
+    position: 'absolute',
+    width: '100%',
+    left: 0,
+    top: 64,
+    zIndex: 1,
+  },
+  logoIcon: { color: '#61DBFB' },
+};
+
+const Navigation = (props) => {
+  const { currentUser } = props;
   const [isNavOpen, setIsNavOpen] = useState(false);
   const handleHamburgerClick = () => {
     setIsNavOpen(!isNavOpen);
@@ -16,6 +32,7 @@ const Navigation = ({ currentUser }) => {
         <div className="flex items-center justify-between h-16">
           <div className="inset-y-0 left-0 flex items-center sm:hidden">
             <button
+              type="button"
               onClick={handleHamburgerClick}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out"
               aria-label="Main menu"
@@ -53,10 +70,7 @@ const Navigation = ({ currentUser }) => {
             <div className="flex-shrink-0">
               <h1 className="text-gray-100 text-center text-xl">
                 {' '}
-                <span
-                  className="fas fa-link fa-lg"
-                  style={{ color: '#61DBFB' }}
-                />{' '}
+                <span className="fas fa-link fa-lg pr-2" style={style.logoIcon} />
                 Link repository
               </h1>
             </div>
@@ -64,7 +78,7 @@ const Navigation = ({ currentUser }) => {
               <div className="flex">
                 <Link
                   onClick={handleClick}
-                  to="/"
+                  to={routes.home}
                   className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 >
                   Home
@@ -72,7 +86,7 @@ const Navigation = ({ currentUser }) => {
                 {currentUser && (
                   <Link
                     onClick={handleClick}
-                    to="/app"
+                    to={routes.app}
                     className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                   >
                     App
@@ -80,7 +94,7 @@ const Navigation = ({ currentUser }) => {
                 )}
                 <Link
                   onClick={handleClick}
-                  to="/about"
+                  to={routes.about}
                   className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 >
                   About
@@ -91,6 +105,7 @@ const Navigation = ({ currentUser }) => {
           <div>
             {currentUser && (
               <button
+                type="button"
                 className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 onClick={logOut}
               >
@@ -102,19 +117,13 @@ const Navigation = ({ currentUser }) => {
       </div>
 
       <div
-        style={{
-          position: 'absolute',
-          width: '100%',
-          left: 0,
-          top: 64,
-          zIndex: 1,
-        }}
+        style={style.mobileNavigation}
         className={isNavOpen ? 'bg-gray-800' : 'hidden sm:hidden'}
       >
         <div className="px-2 pt-2 pb-3">
           <Link
             onClick={handleClick}
-            to="/"
+            to={routes.home}
             className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
           >
             Home
@@ -122,7 +131,7 @@ const Navigation = ({ currentUser }) => {
           {currentUser && (
             <Link
               onClick={handleClick}
-              to="/app"
+              to={routes.app}
               className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
             >
               App
@@ -130,7 +139,7 @@ const Navigation = ({ currentUser }) => {
           )}
           <Link
             onClick={handleClick}
-            to="/about"
+            to={routes.about}
             className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
           >
             About
@@ -139,6 +148,15 @@ const Navigation = ({ currentUser }) => {
       </div>
     </nav>
   );
+};
+
+Navigation.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  currentUser: PropTypes.object,
+};
+
+Navigation.defaultProps = {
+  currentUser: null,
 };
 
 export default Navigation;

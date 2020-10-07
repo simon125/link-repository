@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 const FAVICON_SERVICE_URL = 'http://www.google.com/s2/favicons?domain=';
 
 const style = {
@@ -24,8 +26,7 @@ const style = {
   logoImage: { width: 20, height: 20 },
 };
 
-const LinkKanbanCard = ({
-  rowHandlers,
+const KanbanCard = ({
   description,
   group,
   status,
@@ -35,7 +36,9 @@ const LinkKanbanCard = ({
   handleDragStart,
   handleDragEnd,
   availableGroups,
-  setLink,
+  setLinkToEdit,
+  removeLink,
+  updateLink,
 }) => {
   const [groupToDisplay, setGroupToDisplay] = useState(group);
 
@@ -45,12 +48,12 @@ const LinkKanbanCard = ({
 
   const handleChange = (e) => {
     setGroupToDisplay(e.target.value);
-    rowHandlers.updateLink(id, { group: e.target.value });
+    updateLink(id, { group: e.target.value });
   };
 
   const handleEditButtonClick = (e) => {
     e.stopPropagation();
-    setLink({
+    setLinkToEdit({
       description,
       group,
       status,
@@ -62,7 +65,7 @@ const LinkKanbanCard = ({
 
   const handleDeleteButtonClick = (e) => {
     e.stopPropagation();
-    rowHandlers.removeLink(id);
+    removeLink(id);
   };
 
   return (
@@ -72,15 +75,11 @@ const LinkKanbanCard = ({
       id={title}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      draggable={true}
       style={style.listItem}
+      draggable
     >
       <div style={style.cardContainer}>
-        <img
-          style={style.logoImage}
-          src={`${FAVICON_SERVICE_URL}${url}`}
-          alt=""
-        />
+        <img style={style.logoImage} src={`${FAVICON_SERVICE_URL}${url}`} alt="" />
       </div>
       {title}
       <select
@@ -89,7 +88,7 @@ const LinkKanbanCard = ({
         style={{ height: 45 }}
         name="groupToDisplay"
         id="groupToDisplay"
-        className={`shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500`}
+        className="shadow block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none bg-white focus:border-gray-500"
       >
         {availableGroups.map((gr) => (
           <option key={gr.id} value={gr.value}>
@@ -104,7 +103,7 @@ const LinkKanbanCard = ({
           onClick={handleEditButtonClick}
           className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
         >
-          <span style={style.iconContainer} className="fas fa-pen" />{' '}
+          <span style={style.iconContainer} className="fas fa-pen" />
         </button>
 
         <a
@@ -114,7 +113,7 @@ const LinkKanbanCard = ({
           rel="noopener noreferrer"
           className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
         >
-          <span style={style.iconContainer} className="fas fa-link" />{' '}
+          <span style={style.iconContainer} className="fas fa-link" />
         </a>
         <button
           style={style.cardButton}
@@ -122,11 +121,30 @@ const LinkKanbanCard = ({
           onClick={handleDeleteButtonClick}
           className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
         >
-          <span style={style.iconContainer} className="fas fa-trash-alt " />{' '}
+          <span style={style.iconContainer} className="fas fa-trash-alt " />
         </button>
       </div>
     </div>
   );
 };
 
-export default LinkKanbanCard;
+KanbanCard.propTypes = {
+  description: PropTypes.string.isRequired,
+  group: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  handleDragStart: PropTypes.func.isRequired,
+  handleDragEnd: PropTypes.func.isRequired,
+  availableGroups: PropTypes.arrayOf(PropTypes.object),
+  setLinkToEdit: PropTypes.func.isRequired,
+  removeLink: PropTypes.func.isRequired,
+  updateLink: PropTypes.func.isRequired,
+};
+
+KanbanCard.defaultProps = {
+  availableGroups: [],
+};
+
+export default KanbanCard;
