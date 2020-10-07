@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { logOut } from '../../firebase/firebaseAuth';
@@ -16,7 +17,8 @@ const style = {
   logoIcon: { color: '#61DBFB' },
 };
 
-const Navigation = ({ currentUser }) => {
+const Navigation = (props) => {
+  const { currentUser } = props;
   const [isNavOpen, setIsNavOpen] = useState(false);
   const handleHamburgerClick = () => {
     setIsNavOpen(!isNavOpen);
@@ -68,7 +70,7 @@ const Navigation = ({ currentUser }) => {
             <div className="flex-shrink-0">
               <h1 className="text-gray-100 text-center text-xl">
                 {' '}
-                <span className="fas fa-link fa-lg" style={style.logoIcon} />
+                <span className="fas fa-link fa-lg pr-2" style={style.logoIcon} />
                 Link repository
               </h1>
             </div>
@@ -148,6 +150,13 @@ const Navigation = ({ currentUser }) => {
   );
 };
 
-Navigation.propTypes = {};
+Navigation.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  currentUser: PropTypes.object,
+};
+
+Navigation.defaultProps = {
+  currentUser: null,
+};
 
 export default Navigation;

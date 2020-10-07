@@ -1,4 +1,8 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useRef, useEffect } from 'react';
+
+import PropTypes from 'prop-types';
+
 import CustomSelectOption from './CustomSelectOption';
 
 const style = {
@@ -76,11 +80,7 @@ const CustomSelect = ({
   return (
     <div ref={wrapperRef}>
       <div className="flex">
-        {' '}
-        <label
-          className="block text-gray-700 text-sm font-bold mb-1"
-          htmlFor="password"
-        >
+        <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="password">
           Group
         </label>
       </div>
@@ -88,7 +88,7 @@ const CustomSelect = ({
         <input
           value={value}
           onFocus={() => setIsOpen(true)}
-          readOnly={true}
+          readOnly
           className={`${
             error && 'border-red-500'
           } custom-select__input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
@@ -111,10 +111,7 @@ const CustomSelect = ({
               />
             ))}
           </ul>
-          <div
-            style={style.newOptionForm}
-            className="custom-select__option--input flex"
-          >
+          <div style={style.newOptionForm} className="custom-select__option--input flex">
             <input
               value={newOption}
               onChange={handleOptionChange}
@@ -137,6 +134,24 @@ const CustomSelect = ({
       </div>
     </div>
   );
+};
+
+CustomSelect.propTypes = {
+  value: PropTypes.string,
+  error: PropTypes.string,
+  options: PropTypes.arrayOf(PropTypes.object),
+  handlers: PropTypes.shape({
+    handleChange: PropTypes.func.isRequired,
+    removeGroup: PropTypes.func.isRequired,
+    addGroup: PropTypes.func.isRequired,
+    updateGroup: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+CustomSelect.defaultProps = {
+  value: '',
+  error: null,
+  options: [],
 };
 
 export default CustomSelect;

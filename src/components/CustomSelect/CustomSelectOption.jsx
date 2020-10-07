@@ -3,16 +3,12 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 const CustomSelectOption = ({
   option,
   isEditModeOnGlobal,
-  handlers: {
-    handleChange,
-    setIsOpen,
-    removeGroup,
-    setIsEditModeOnGlobal,
-    updateGroup,
-  },
+  handlers: { handleChange, setIsOpen, removeGroup, setIsEditModeOnGlobal, updateGroup },
 }) => {
   const isMobileDevice = window.innerWidth < 600;
   const [isEditMode, setIsEditMode] = useState(false);
@@ -102,6 +98,19 @@ const CustomSelectOption = ({
       )}
     </>
   );
+};
+
+CustomSelectOption.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  option: PropTypes.object.isRequired,
+  isEditModeOnGlobal: PropTypes.bool.isRequired,
+  handlers: PropTypes.shape({
+    handleChange: PropTypes.func,
+    setIsOpen: PropTypes.func,
+    removeGroup: PropTypes.func,
+    setIsEditModeOnGlobal: PropTypes.func,
+    updateGroup: PropTypes.func,
+  }).isRequired,
 };
 
 export default CustomSelectOption;

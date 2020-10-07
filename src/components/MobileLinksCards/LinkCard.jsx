@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
+import PropTypes from 'prop-types';
+
 const FAVICON_SERVICE_URL = 'http://www.google.com/s2/favicons?domain=';
 const AVAILABLE_STATUSES = ['Already read', 'In progress', 'Not touched'];
 
 const LinkCard = ({
   link: { url, title, description, status, group, id },
   availableGroups,
-  rowHandlers,
+  rowHandlers: { updateLink, removeLink, setLink, handleShowForm },
 }) => {
   const [groupToDisplay, setGroupToDisplay] = useState(group);
   const [statusToDisplay, setStatusToDisplay] = useState(status);
@@ -20,11 +22,11 @@ const LinkCard = ({
     switch (e.target.name) {
       case 'groupToDisplay':
         setGroupToDisplay(e.target.value);
-        rowHandlers.updateLink(id, { group: e.target.value });
+        updateLink(id, { group: e.target.value });
         break;
       case 'statusToDisplay':
         setStatusToDisplay(e.target.value);
-        rowHandlers.updateLink(id, { status: e.target.value });
+        updateLink(id, { status: e.target.value });
         break;
       default:
     }
@@ -32,7 +34,7 @@ const LinkCard = ({
 
   const handleEditButtonClick = (e) => {
     e.stopPropagation();
-    rowHandlers.setLink({
+    setLink({
       description,
       group,
       status,
@@ -40,19 +42,16 @@ const LinkCard = ({
       url,
       id,
     });
-    rowHandlers.handleShowForm();
+    handleShowForm();
   };
 
   const handleDeleteButtonClick = (e) => {
     e.stopPropagation();
-    rowHandlers.removeLink(id);
+    removeLink(id);
   };
 
   return (
-    <div
-      style={{ width: '100%' }}
-      className=" rounded overflow-hidden shadow-lg"
-    >
+    <div style={{ width: '100%' }} className=" rounded overflow-hidden shadow-lg">
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2 flex">
           {' '}
@@ -102,7 +101,7 @@ const LinkCard = ({
             onClick={handleEditButtonClick}
             className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
           >
-            <span className="fas fa-pen" />{' '}
+            <span className="fas fa-pen" />
           </button>
 
           <a
@@ -120,7 +119,7 @@ const LinkCard = ({
                 transform: 'translate(-50%, -50%)',
               }}
               className="fas fa-link"
-            />{' '}
+            />
           </a>
           <button
             style={{ height: 30, width: 30 }}
@@ -128,12 +127,34 @@ const LinkCard = ({
             onClick={handleDeleteButtonClick}
             className="mr-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-1 border border-blue-500 hover:border-transparent rounded"
           >
-            <span className="fas fa-trash-alt " />{' '}
+            <span className="fas fa-trash-alt " />
           </button>
         </div>
       </div>
     </div>
   );
+};
+
+LinkCard.propTypes = {
+  link: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    group: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  availableGroups: PropTypes.arrayOf(PropTypes.object),
+  rowHandlers: PropTypes.shape({
+    updateLink: PropTypes.func,
+    removeLink: PropTypes.func,
+    setLink: PropTypes.func,
+    handleShowForm: PropTypes.func,
+  }).isRequired,
+};
+
+LinkCard.defaultProps = {
+  availableGroups: [],
 };
 
 export default LinkCard;

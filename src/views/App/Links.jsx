@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import GridLoader from 'react-spinners/ClipLoader';
 
+import LinksFilters from '../../components/LinksFilters/LinksFilters';
+import LinksKanbanBoard from '../../components/LinksKanbanBoard/LinksKanbanBoard';
+import LinksTable from '../../components/LinksTable/LinksTable';
+import ToggleButton from '../../components/ToggleButton/ToggleButton';
 import { ALL_OPTION } from '../../constants';
-import GridView from './GridView';
-import KanbanView from './KanbanView';
-import LinkTableFilter from './LinkTableFilter';
-import ViewToggler from './ViewToggler';
+import { updateLink, removeLink } from '../../firebase/firebaseCRUD';
 
 const style = {
-  listContainer: { display: 'flex', justifyContent: 'space-around' },
   tableHeaderCell: {
     background: 'transparent',
     border: 'none',
@@ -25,13 +25,8 @@ const style = {
   },
 };
 
-const LinkTable = (props) => {
-  const {
-    linksToDisplay = [],
-    availableGroups,
-    setLinkToEdit,
-    showSpinner,
-  } = props;
+const Links = (props) => {
+  const { linksToDisplay = [], availableGroups, setLinkToEdit, showSpinner } = props;
 
   const [filters, setFilters] = useState({
     group: ALL_OPTION,
@@ -45,14 +40,29 @@ const LinkTable = (props) => {
     setLinkToEdit,
     availableGroups,
     linksToDisplay,
+    rowHandlers: {
+      updateLink,
+      removeLink,
+    },
+  };
+
+  const buttonsConfig = {
+    leftIcon: 'fas fa-th',
+    rightIcon: 'fas fa-list',
+    leftTitle: '',
+    rightTitle: '',
   };
 
   return (
     <div className="rounded overflow-hidden shadow-lg p-5">
       <div className="flex my-5 justify-between">
-        <ViewToggler setKanbanView={setKanbanView} kanbanView={kanbanView} />
+        <ToggleButton
+          clickCallback={setKanbanView}
+          buttonState={kanbanView}
+          buttonsConfig={buttonsConfig}
+        />
         {!kanbanView && (
-          <LinkTableFilter
+          <LinksFilters
             filters={filters}
             setFilters={setFilters}
             availableGroups={availableGroups}
@@ -60,9 +70,9 @@ const LinkTable = (props) => {
         )}
       </div>
       {kanbanView ? (
-        <KanbanView {...displayingComponentProps} />
+        <LinksKanbanBoard {...displayingComponentProps} />
       ) : (
-        <GridView filters={filters} {...displayingComponentProps} />
+        <LinksTable filters={filters} {...displayingComponentProps} />
       )}
       <div style={style.spinnerContainer}>
         {/* TODO: move size and color to constatnts */}
@@ -72,7 +82,7 @@ const LinkTable = (props) => {
   );
 };
 
-LinkTable.propTypes = {
+Links.propTypes = {
   linksToDisplay: PropTypes.arrayOf(
     PropTypes.shape({
       description: PropTypes.string,
@@ -81,11 +91,18 @@ LinkTable.propTypes = {
       title: PropTypes.string,
       url: PropTypes.string,
       id: PropTypes.string,
-    })
+    }),
   ),
   availableGroups: PropTypes.arrayOf(PropTypes.object),
   setLinkToEdit: PropTypes.func,
   showSpinner: PropTypes.bool,
 };
 
-export default LinkTable;
+Links.defaultProps = {
+  linksToDisplay: [],
+  availableGroups: [],
+  setLinkToEdit: () => {},
+  showSpinner: false,
+};
+
+export default Links;
